@@ -248,7 +248,10 @@ namespace Hpdi.Vss2Git
 
         public override void Move(string sourcePath, string destPath)
         {
-            VcsExec("mv -f -- " + QuoteRelativePath(sourcePath) + " " + QuoteRelativePath(destPath));
+            if (!VcsExecUnless("mv -f -- " + QuoteRelativePath(sourcePath) + " " + QuoteRelativePath(destPath), "source directory is empty"))
+            {
+                Directory.Move(sourcePath, destPath);
+            }
             SetNeedsCommit();
         }
 

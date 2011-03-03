@@ -157,6 +157,12 @@ namespace Hpdi.Vss2Git
             ExecuteUnless(startInfo, null);
         }
 
+        public bool VcsExecUnless(string args, string unless)
+        {
+            var startInfo = GetStartInfo(args);
+            return ExecuteUnless(startInfo, unless);
+        }
+
         public void Exec(string exe, string args)
         {
             var startInfo = GetStartInfo(exe, args);
