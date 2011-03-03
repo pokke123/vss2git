@@ -409,13 +409,23 @@ namespace Hpdi.Vss2Git
                                 {
                                     if (Directory.Exists(targetPath))
                                     {
-                                        if (((VssProjectInfo)itemInfo).ContainsFiles())
+                                        if (pathMapper.ProjectContainsLogicalName(project, target))
                                         {
-                                            vcsWrapper.RemoveDir(targetPath, true);
+                                            // we already have another project with the same logical name
+                                            logger.WriteLine("NOTE: {0} contains another directory named {1}; not deleting directory", 
+                                                projectDesc, target.LogicalName);
                                         }
                                         else
                                         {
-                                            vcsWrapper.RemoveEmptyDir(targetPath);
+                                            if (((VssProjectInfo)itemInfo).ContainsFiles())
+                                            {
+                                                vcsWrapper.RemoveDir(targetPath, true);
+                                            }
+                                            else
+                                            {
+                                                // git doesn't care about directories with no files
+                                                vcsWrapper.RemoveEmptyDir(targetPath);
+                                            }
                                         }
                                     }
                                 }
