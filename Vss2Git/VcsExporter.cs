@@ -371,8 +371,8 @@ namespace Hpdi.Vss2Git
                 }
 
                 bool isAddAction = false;
-                bool writeProject = false;
                 bool writeFile = false;
+                string writeProjectPhysicalName = null;
                 VssItemInfo itemInfo = null;
                 switch (actionType)
                 {
@@ -409,23 +409,23 @@ namespace Hpdi.Vss2Git
                                 {
                                     if (Directory.Exists(targetPath))
                                     {
-                                        if (pathMapper.ProjectContainsLogicalName(project, target))
+                                        string successor = pathMapper.TryToGetPhysicalNameContainedInProject(project, target);
+                                        if (successor != null)
                                         {
                                             // we already have another project with the same logical name
                                             logger.WriteLine("NOTE: {0} contains another directory named {1}; not deleting directory", 
                                                 projectDesc, target.LogicalName);
+                                            writeProjectPhysicalName = successor; // rewrite this project because it gets deleted below
+                                        }
+                                        
+                                        if (((VssProjectInfo)itemInfo).ContainsFiles())
+                                        {
+                                            vcsWrapper.RemoveDir(targetPath, true);
                                         }
                                         else
                                         {
-                                            if (((VssProjectInfo)itemInfo).ContainsFiles())
-                                            {
-                                                vcsWrapper.RemoveDir(targetPath, true);
-                                            }
-                                            else
-                                            {
-                                                // git doesn't care about directories with no files
-                                                vcsWrapper.RemoveEmptyDir(targetPath);
-                                            }
+                                            // git doesn't care about directories with no files
+                                            vcsWrapper.RemoveEmptyDir(targetPath);
                                         }
                                     }
                                 }
@@ -436,7 +436,7 @@ namespace Hpdi.Vss2Git
                                         // not sure how it can happen, but a project can evidently
                                         // contain another file with the same logical name, so check
                                         // that this is not the case before deleting the file
-                                        if (pathMapper.ProjectContainsLogicalName(project, target))
+                                        if (pathMapper.TryToGetPhysicalNameContainedInProject(project, target) != null)
                                         {
                                             logger.WriteLine("NOTE: {0} contains another file named {1}; not deleting file",
                                                 projectDesc, target.LogicalName);
@@ -519,6 +519,8 @@ namespace Hpdi.Vss2Git
                                 else
                                 {
                                     logger.WriteLine("***** warning: inside move with non existing source " + moveFromAction.OriginalProject);
+                                    // project was moved from a now-destroyed project
+                                    writeProjectPhysicalName = target.PhysicalName;
                                 }
                             }
                             else
@@ -631,7 +633,8 @@ namespace Hpdi.Vss2Git
                         }
                         else if (target.IsProject)
                         {
-                            writeProject = true;
+                            Directory.CreateDirectory(targetPath);
+                            writeProjectPhysicalName = target.PhysicalName;
                         }
                         else
                         {
@@ -639,11 +642,11 @@ namespace Hpdi.Vss2Git
                         }
                     }
 
-                    if (writeProject && pathMapper.IsProjectRooted(target.PhysicalName))
+                    if (writeProjectPhysicalName != null && pathMapper.IsProjectRooted(writeProjectPhysicalName))
                     {
                         Directory.CreateDirectory(targetPath);
                         // create all contained subdirectories
-                        foreach (var projectInfo in pathMapper.GetAllProjects(target.PhysicalName))
+                        foreach (var projectInfo in pathMapper.GetAllProjects(writeProjectPhysicalName))
                         {
                             logger.WriteLine("{0}: Creating subdirectory {1}",
                                 projectDesc, projectInfo.LogicalName);
@@ -652,10 +655,10 @@ namespace Hpdi.Vss2Git
 
                         vcsWrapper.AddDir(targetPath);
                         // write current rev of all contained files
-                        foreach (var fileInfo in pathMapper.GetAllFiles(target.PhysicalName))
+                        foreach (var fileInfo in pathMapper.GetAllFiles(writeProjectPhysicalName))
                         {
                             WriteRevision(pathMapper, actionType, fileInfo.PhysicalName,
-                                fileInfo.Version, target.PhysicalName);
+                                fileInfo.Version, writeProjectPhysicalName);
                         }
                     }
                     else if (writeFile)
