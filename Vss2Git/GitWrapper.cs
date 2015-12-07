@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -106,7 +107,7 @@ namespace Hpdi.Vss2Git
             }
             addQueue.Clear();
             add.Call();
-            SetNeedsCommit();
+            base.SetNeedsCommit();
             return true;
         }
 
@@ -124,15 +125,14 @@ namespace Hpdi.Vss2Git
 
         public override bool AddAll()
         {
-            git.Add().AddFilepattern(".").Call();
-            SetNeedsCommit();
+            // git.Add().AddFilepattern(".").Call();
+            // base.SetNeedsCommit();
             return true;
         }
 
         public override void RemoveFile(string path)
         {
             deleteQueue.Add(path);
-            SetNeedsCommit();
         }
 
         private bool DoDeletes()
@@ -147,8 +147,8 @@ namespace Hpdi.Vss2Git
             }
             deleteQueue.Clear();
             delete.Call();
-            SetNeedsCommit();
             CleanupEmptyDirs();
+            base.SetNeedsCommit();
             return true;
         }
 
@@ -166,7 +166,6 @@ namespace Hpdi.Vss2Git
         {
             deleteQueue.Add(path); // is always recursive
             dirDeleteQueue.Add(path);
-            SetNeedsCommit();
         }
 
         public override void RemoveEmptyDir(string path)
@@ -178,7 +177,7 @@ namespace Hpdi.Vss2Git
         {
             git.Rm().AddFilepattern(RelativePath(sourcePath)).Call();
             git.Add().AddFilepattern(RelativePath(destPath)).Call();
-            SetNeedsCommit();
+            base.SetNeedsCommit();
         }
 
         public override void MoveEmptyDir(string sourcePath, string destPath)
@@ -187,15 +186,24 @@ namespace Hpdi.Vss2Git
             Directory.Move(sourcePath, destPath);
         }
 
+        public override void SetNeedsCommit()
+        {
+            // Suppress explicit calls.
+        }
+
         public override bool DoCommit(string authorName, string authorEmail, string comment, DateTime localTime)
         {
+#if false
+            // enable this when you find empty commits or uncommitted changes; this will throw on that commit
+
             var status = git.Status().Call();
 
             if (status.IsClean())
-            {
-                Console.WriteLine("Skipping empty commit");
-                return false;
-            }
+                throw new InvalidOperationException("Expected changes");
+
+            if (status.GetModified().Count > 0 || status.GetMissing().Count > 0 || status.GetUntracked().Count > 0 || status.GetConflicting().Count > 0)
+                throw new InvalidOperationException("Have modified, missing, untracked or conflicting files");
+#endif
 
             var person = new PersonIdent(authorName, authorEmail, localTime, TimeZoneInfo.Local);
 

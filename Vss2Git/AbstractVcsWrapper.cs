@@ -371,7 +371,7 @@ namespace Hpdi.Vss2Git
             return needsCommit;
         }
 
-        public void SetNeedsCommit()
+        public virtual void SetNeedsCommit()
         {
             needsCommit = true;
         }
