@@ -118,16 +118,19 @@ namespace Hpdi.Vss2Git
 
                 string vcs = vcsWrapper.GetVcs();
 
-                while (!vcsWrapper.FindExecutable())
+                if (vcs != null)
                 {
-                    var button = MessageBox.Show(vcs + " not found in PATH. " +
-                        "If you need to modify your PATH variable, please " +
-                        "restart the program for the changes to take effect.",
-                        "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
-                    if (button == DialogResult.Cancel)
+                    while (!vcsWrapper.FindExecutable())
                     {
-                        workQueue.Abort();
-                        return;
+                        var button = MessageBox.Show(vcs + " not found in PATH. " +
+                                                     "If you need to modify your PATH variable, please " +
+                                                     "restart the program for the changes to take effect.",
+                            "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                        if (button == DialogResult.Cancel)
+                        {
+                            workQueue.Abort();
+                            return;
+                        }
                     }
                 }
 
