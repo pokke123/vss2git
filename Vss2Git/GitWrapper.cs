@@ -236,7 +236,9 @@ namespace Hpdi.Vss2Git
         public override DateTime? GetLastCommit()
         {
             if (git == null)
-                return null;
+            {
+                git = Git.Open(GetOutputDirectory());
+            }
 
             foreach (var commit in git.Log().SetMaxCount(1).Call())
             {
