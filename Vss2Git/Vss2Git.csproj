@@ -67,6 +67,7 @@
     <Compile Include="CollectionUtil.cs" />
     <Compile Include="ChangesetBuilder.cs" />
     <Compile Include="IVcsWrapper.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="ProcessException.cs" />
     <Compile Include="ExceptionFormatter.cs">
     </Compile>

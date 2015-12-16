@@ -29,7 +29,9 @@ namespace Hpdi.Vss2Git
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm(args));
+            var mainForm = new MainForm(args);
+            if (!mainForm.IsDisposed)
+                Application.Run(mainForm);
         }
     }
 }

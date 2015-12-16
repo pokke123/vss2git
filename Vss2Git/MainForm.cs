@@ -23,6 +23,7 @@ using System.IO;
 using System.Configuration;
 using System.Globalization;
 using System.Threading;
+using Mono.Options;
 
 namespace Hpdi.Vss2Git
 {
@@ -46,13 +47,50 @@ namespace Hpdi.Vss2Git
 
         private DateTime? continueAfter;
 
+        private OptionSet optionSet;
+        private bool goAndExit;
+        private bool exitOnComplete;
+
         public MainForm(string[] args)
         {
             InitializeComponent();
-            if (args.Length > 0)
+            parseCommandLine(args);
+        }
+
+
+        private void parseCommandLine(string[] args)
+        {
+            try
             {
-                settingsFile = args[0];
+                optionSet = new OptionSet() {
+                    { "s|settings=",  "the settings {FILE}",
+                       v => settingsFile = v },
+                    { "go",  "perform conversion and exit",
+                       v => goAndExit = v != null },
+                    { "h|help",  "show this message and exit",
+                       v => { if (v != null) showHelp(); } },
+                };
+                var extra = optionSet.Parse(args);
+                if (extra.Count > 0)
+                    throw new OptionException("Unknown option: " + extra[0], extra[0]);
             }
+            catch (OptionException ex)
+            {
+                MessageBox.Show("Invalid command line: " + ex.Message + "\n\n"
+                    + "Try `--help` for more information.", "VSS2Git",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Close();
+            }
+        }
+
+        private void showHelp()
+        {
+            var sw = new StringWriter();
+            optionSet.WriteOptionDescriptions(sw);
+            MessageBox.Show("Usage: " + Path.GetFileName(System.Reflection.Assembly.GetEntryAssembly().Location)
+                + " <options>\nWhere <options> are:\n" + sw,
+                "VSS2Git Help", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Close();
         }
 
         private void OpenLog(string filename)
@@ -248,6 +286,11 @@ namespace Hpdi.Vss2Git
                 }
                 goButton.Enabled = true;
                 cancelButton.Text = "Close";
+                if (goAndExit && exitOnComplete)
+                {
+                    exitOnComplete = false;
+                    Close();
+                }
             }
 
             var exceptions = workQueue.FetchExceptions();
@@ -298,6 +341,11 @@ namespace Hpdi.Vss2Git
 
             ReadSettings();
             LoadRepoSettings();
+            if (goAndExit)
+            {
+                goButton_Click(null, null);
+                exitOnComplete = true;
+            }
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -339,6 +387,8 @@ namespace Hpdi.Vss2Git
             {
                 var settings = Properties.Settings.Default;
                 string lastSettingsFile = settings.LastSettingsFile;
+                if (lastSettingsFile == "")
+                    lastSettingsFile = "vss2git.properties";
                 settingsSaveFileDialog.InitialDirectory = Path.GetDirectoryName(lastSettingsFile);
                 settingsSaveFileDialog.FileName = Path.GetFileName(lastSettingsFile);
                 if (DialogResult.OK == settingsSaveFileDialog.ShowDialog(this))
