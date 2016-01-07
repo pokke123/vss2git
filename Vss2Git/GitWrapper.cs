@@ -93,7 +93,7 @@ namespace Hpdi.Vss2Git
 
         private bool DoAdd(string paths)
         {
-            var startInfo = GetStartInfo("add --" + paths);
+            var startInfo = GetStartInfo("add -f --" + paths);
 
             // add fails if there are no files (directories don't count)
             bool result = ExecuteUnless(startInfo, "did not match any files");
@@ -194,7 +194,7 @@ namespace Hpdi.Vss2Git
 
         public override void Move(string sourcePath, string destPath)
         {
-            VcsExec("mv -- " + QuoteRelativePath(sourcePath) + " " + QuoteRelativePath(destPath));
+            VcsExec("mv -f -- " + QuoteRelativePath(sourcePath) + " " + QuoteRelativePath(destPath));
             SetNeedsCommit();
         }
 
