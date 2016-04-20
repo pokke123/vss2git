@@ -233,7 +233,7 @@ namespace Hpdi.Vss2Git
         {
             TempFile commentFile;
 
-            var args = "tag";
+            var args = "tag -f"; //TODO: check how to detect label deletions (doesn't seem to happen right now)
             // tools like Mercurial's git converter only import annotated tags
             // remark: annotated tags are created with the git -a option,
             // see e.g. http://learn.github.com/p/tagging.html
