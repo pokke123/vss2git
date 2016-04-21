@@ -331,10 +331,6 @@ namespace Hpdi.Vss2Git
                 description = string.Format("CP{0} - {1}", codePage, encoding.DisplayName);
                 var index = encodingComboBox.Items.Add(description);
                 codePages[index] = encoding;
-                if (codePage == 65001)
-                {
-                    encodingComboBox.SelectedIndex = index;
-                }
                 if (codePage == defaultCodePage)
                 {
                     codePages[defaultIndex] = encoding;
