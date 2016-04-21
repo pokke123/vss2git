@@ -420,7 +420,10 @@ namespace Hpdi.Vss2Git
             {
                 var settings = Properties.Settings.Default;
                 string lastSettingsFile = settings.LastSettingsFile;
-                settingsOpenFileDialog.InitialDirectory = Path.GetDirectoryName(lastSettingsFile);
+                if (!string.IsNullOrEmpty(lastSettingsFile))
+                {
+                    settingsOpenFileDialog.InitialDirectory = Path.GetDirectoryName(lastSettingsFile);
+                }
                 settingsOpenFileDialog.FileName = Path.GetFileName(lastSettingsFile);
                 if (DialogResult.OK == settingsOpenFileDialog.ShowDialog(this))
                 {
