@@ -102,7 +102,8 @@ namespace Hpdi.Vss2Git
         {
             Invoke((MethodInvoker)delegate
             {
-                IVcsWrapper vcsWrapper = outDirTextBox.Text.Length > 0 ? CreateVcsWrapper(Encoding.Default) : null;
+                Encoding enc = (transcodeCheckBox.Checked ? Encoding.UTF8 : Encoding.Default);
+                IVcsWrapper vcsWrapper = outDirTextBox.Text.Length > 0 ? CreateVcsWrapper(enc) : null;
                 backgroundQueue.AddLast(delegate
                 {
                     continueAfter = vcsWrapper != null ? vcsWrapper.GetLastCommit() : null;
@@ -225,6 +226,7 @@ namespace Hpdi.Vss2Git
 
         private IVcsWrapper CreateVcsWrapper(Encoding commitEncoding)
         {
+            Invoke((MethodInvoker)delegate { if (transcodeCheckBox.Checked) commitEncoding = Encoding.UTF8; } );
             string repoPath = outDirTextBox.Text;
             string vcsType = vcsSetttingsTabs.SelectedTab.Text;
             if (vcsType.Equals(vcsTypeGit))
