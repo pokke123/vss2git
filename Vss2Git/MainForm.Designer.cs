@@ -333,6 +333,8 @@
             // 
             // vcsSetttingsTabs
             // 
+            this.vcsSetttingsTabs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.vcsSetttingsTabs.Controls.Add(this.tabPage1);
             this.vcsSetttingsTabs.Controls.Add(this.tabPage2);
             this.vcsSetttingsTabs.Location = new System.Drawing.Point(9, 154);
@@ -756,7 +758,8 @@
             this.Controls.Add(this.vssGroupBox);
             this.Controls.Add(this.statusStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(458, 419);
+            this.MaximumSize = new System.Drawing.Size(1600, 636);
+            this.MinimumSize = new System.Drawing.Size(600, 636);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "VSS2Git";
