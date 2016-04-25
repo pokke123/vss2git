@@ -131,6 +131,7 @@ namespace Hpdi.Vss2Git
                     }
                 }
 
+                bool makeInitialCommit = resetRepo;
                 if (!RetryCancel(delegate { vcsWrapper.Init(resetRepo); }))
                 {
                     return;
@@ -230,6 +231,11 @@ namespace Hpdi.Vss2Git
                     try
                     {
                         ReplayChangeset(pathMapper, changeset, labels);
+                        if (makeInitialCommit)
+                        {
+                            vcsWrapper.Init(changeset, repoPath);
+                            makeInitialCommit = false;
+                        }
                         vcsWrapper.NeedsCommit(); // to flush outstanding adds/deletes
                     }
                     finally

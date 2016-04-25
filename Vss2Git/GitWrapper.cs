@@ -32,17 +32,25 @@ namespace Hpdi.Vss2Git
     {
         public static readonly string gitMetaDir = ".git";
         public static readonly string gitExecutable = "git";
+        public const string gitIgnoreFile = ".gitignore";
 
         private List<String> addQueue = new List<string>();
         private List<String> deleteQueue = new List<string>();
         private List<String> dirDeleteQueue = new List<string>();
 
         private Encoding commitEncoding = Encoding.UTF8;
+        private string gitIgnoreInfo;
 
         public Encoding CommitEncoding
         {
             get { return commitEncoding; }
             set { commitEncoding = value; }
+        }
+
+        public string GitIgnoreInfo
+        {
+            get { return gitIgnoreInfo; }
+            set { gitIgnoreInfo = value; }
         }
 
         private bool forceAnnotatedTags = true;
@@ -73,6 +81,29 @@ namespace Hpdi.Vss2Git
                 Thread.Sleep(0);
                 Directory.CreateDirectory(GetOutputDirectory());
                 VcsExec("init");
+            }
+        }
+
+        public override void Init(Changeset changeset, string repoPath)
+        {
+            if ((!object.ReferenceEquals(changeset, null)) && (!string.IsNullOrEmpty(gitIgnoreInfo)))
+            {
+                string[] data = gitIgnoreInfo.Trim().Trim('|').Split('|');
+                if (data.Length == 4)
+                {
+                    string file = Path.Combine(data[0], gitIgnoreFile);
+                    if (!File.Exists(file))
+                    {
+                        file = data[0];
+                    }
+                    if (File.Exists(file))
+                    {
+                        File.Copy(file, Path.Combine(repoPath, gitIgnoreFile), true);
+                        //DoAdd(gitIgnoreFile);
+                        AddAll();
+                        Commit(data[1], data[2], data[3], changeset.DateTime.AddHours(-2));
+                    }
+                }
             }
         }
 

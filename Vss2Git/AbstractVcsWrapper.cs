@@ -445,6 +445,7 @@ namespace Hpdi.Vss2Git
         }
 
         public abstract void Init(bool resetRepo);
+        public abstract void Init(Changeset changeset, string repoPath);
         public abstract void Configure(bool newRepo);
         public abstract bool Add(string path);
         public abstract bool AddDir(string path);

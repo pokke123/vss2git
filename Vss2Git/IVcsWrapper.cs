@@ -29,6 +29,7 @@ namespace Hpdi.Vss2Git
         TimeSpan ElapsedTime();
         bool FindExecutable();
         void Init(bool resetRepo);
+        void Init(Changeset changeset, string repoPath);
         void Exit();
         void Configure(bool newRepo);
         bool Add(string path);

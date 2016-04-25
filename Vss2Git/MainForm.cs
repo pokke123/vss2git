@@ -231,7 +231,9 @@ namespace Hpdi.Vss2Git
             string vcsType = vcsSetttingsTabs.SelectedTab.Text;
             if (vcsType.Equals(vcsTypeGit))
             {
-                return new GitWrapper(repoPath, logger, commitEncoding, forceAnnotatedCheckBox.Checked);
+                GitWrapper wrapper = new GitWrapper(repoPath, logger, commitEncoding, forceAnnotatedCheckBox.Checked);
+                wrapper.GitIgnoreInfo = $"{ignoreFile.Text}|{userName.Text}|{userEmail.Text}|{initialComment.Text}";
+                return wrapper;
             }
             else if (vcsType.Equals(vcsTypeSvn))
             {
