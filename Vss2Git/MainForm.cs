@@ -204,7 +204,15 @@ namespace Hpdi.Vss2Git
                         vcsExporter.CommitEncoding = encoding;
                     }
                     vcsExporter.ResetRepo = resetRepoCheckBox.Checked;
-                    vcsExporter.ExportToVcs(outDirTextBox.Text, continueAfter);
+                    if (vcsExporter.ResetRepo)
+                    {
+                        vcsExporter.ExportToVcs(outDirTextBox.Text, null);
+                    }
+                    else
+                    if (vcsExporter.ResetRepo)
+                    {
+                        vcsExporter.ExportToVcs(outDirTextBox.Text, continueAfter);
+                    }
                 }
 
                 workQueue.Idle += delegate
