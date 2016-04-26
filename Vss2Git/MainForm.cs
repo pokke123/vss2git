@@ -35,6 +35,7 @@ namespace Hpdi.Vss2Git
     {
         public static readonly string vcsTypeGit = "git";
         public static readonly string vcsTypeSvn = "svn";
+        public const string emailPropertiesFileName = "emails.properties";
 
         private readonly Dictionary<int, EncodingInfo> codePages = new Dictionary<int, EncodingInfo>();
         private readonly WorkQueue workQueue = new WorkQueue(1);
@@ -175,7 +176,7 @@ namespace Hpdi.Vss2Git
                     return;
                 }
                 // read the emails dictionary
-                var emailDictionary = ReadDictionaryFile("e-mail dictionary", db.BasePath, "emails.properties");
+                var emailDictionary = ReadDictionaryFile("e-mail dictionary", db.BasePath, emailPropertiesFileName);
 
                 revisionAnalyzer = new RevisionAnalyzer(workQueue, logger, db);
                 if (!string.IsNullOrEmpty(excludeTextBox.Text))
@@ -606,7 +607,7 @@ namespace Hpdi.Vss2Git
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            var emailDictionary = ReadDictionaryFile("e-mail dictionary", db.BasePath, "emails.properties");
+            var emailDictionary = ReadDictionaryFile("e-mail dictionary", db.BasePath, emailPropertiesFileName);
 
             revisionAnalyzer = new RevisionAnalyzer(workQueue, logger, db);
             if (!string.IsNullOrEmpty(excludeTextBox.Text))
@@ -626,7 +627,7 @@ namespace Hpdi.Vss2Git
                         emailDictionary.Add(user, "");
                     }
                 }
-                string propsPath = Path.Combine(db.BasePath, "emails.properties");
+                string propsPath = Path.Combine(db.BasePath, emailPropertiesFileName);
                 WriteDictionaryFile(emailDictionary, propsPath);
                 MessageBox.Show("The list of usernames is written to:\n\n"
                     + propsPath + "\n\n"
