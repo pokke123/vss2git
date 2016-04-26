@@ -626,7 +626,7 @@ namespace Hpdi.Vss2Git
                         emailDictionary.Add(user, "");
                     }
                 }
-                string propsPath = db.BasePath + Path.DirectorySeparatorChar + "emails.properties";
+                string propsPath = Path.Combine(db.BasePath, "emails.properties");
                 WriteDictionaryFile(emailDictionary, propsPath);
                 MessageBox.Show("The list of usernames is written to:\n\n"
                     + propsPath + "\n\n"
