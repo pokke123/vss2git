@@ -721,5 +721,29 @@ namespace Hpdi.Vss2Git
         {
             LoadRepoSettings();
         }
+
+        private void GitignoreFileButton_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dlg = new OpenFileDialog())
+            {
+                try
+                {
+                    dlg.FileName = this.ignoreFile.Text;
+                    dlg.CheckPathExists = true;
+                    dlg.CheckFileExists = true;
+                    dlg.Multiselect = false;
+                    dlg.Filter = "git ignore file|.gitignore";
+                    dlg.Title = "Select initial .gitignore file";
+                    if (dlg.ShowDialog() == DialogResult.OK)
+                    {
+                        this.ignoreFile.Text = dlg.FileName;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "VSS2Git", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
     }
 }

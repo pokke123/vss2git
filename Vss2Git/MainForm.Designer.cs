@@ -400,6 +400,7 @@
             this.gitignoreFileButton.Size = new System.Drawing.Size(23, 23);
             this.gitignoreFileButton.TabIndex = 10;
             this.gitignoreFileButton.UseVisualStyleBackColor = true;
+            this.gitignoreFileButton.Click += new System.EventHandler(this.GitignoreFileButton_Click);
             // 
             // userName
             // 
