@@ -486,6 +486,10 @@ namespace Hpdi.Vss2Git
             svnTrunkTextBox.Text = settings.SvnTrunk;
             svnTagsTextBox.Text = settings.SvnTags;
             svnBranchesTextBox.Text = settings.SvnBranches;
+            ignoreFile.Text = settings.GitFirstCommitIgnoreFile;
+            userName.Text = settings.GitFirstCommitUserName;
+            userEmail.Text = settings.GitFirstCommitUserMail;
+            initialComment.Text = settings.GitFirstCommitComment;
 
             int index = 0;
             int count = vcsSetttingsTabs.TabPages.Count;
@@ -524,6 +528,10 @@ namespace Hpdi.Vss2Git
             settings.SvnTrunk = svnTrunkTextBox.Text;
             settings.SvnTags = svnTagsTextBox.Text;
             settings.SvnBranches = svnBranchesTextBox.Text;
+            settings.GitFirstCommitIgnoreFile = ignoreFile.Text;
+            settings.GitFirstCommitUserName = userName.Text;
+            settings.GitFirstCommitUserMail = userEmail.Text;
+            settings.GitFirstCommitComment = initialComment.Text;
         }
 
         private IDictionary<string, string> ReadDictionaryFile(string fileKind, string repoPath, string fileName)

@@ -286,5 +286,57 @@ namespace Hpdi.Vss2Git.Properties {
                 this["ContinueSync"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GitFirstCommitIgnoreFile
+        {
+            get {
+                return ((string)(this["GitFirstCommitIgnoreFile"]));
+            }
+            set {
+                this["GitFirstCommitIgnoreFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GitFirstCommitUserName
+        {
+            get {
+                return ((string)(this["GitFirstCommitUserName"]));
+            }
+            set {
+                this["GitFirstCommitUserName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GitFirstCommitUserMail
+        {
+            get {
+                return ((string)(this["GitFirstCommitUserMail"]));
+            }
+            set {
+                this["GitFirstCommitUserMail"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GitFirstCommitComment
+        {
+            get {
+                return ((string)(this["GitFirstCommitComment"]));
+            }
+            set {
+                this["GitFirstCommitComment"] = value;
+            }
+        }
     }
 }
