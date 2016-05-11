@@ -223,7 +223,7 @@ namespace Hpdi.Vss2Git
 
         private bool HasSameComment(Revision rev1, Revision rev2)
         {
-            return !string.IsNullOrEmpty(rev1.Comment) && rev1.Comment == rev2.Comment;
+            return (rev1.User == rev2.User) && !string.IsNullOrEmpty(rev1.Comment) && (rev1.Comment == rev2.Comment);
         }
 
         private void AddChangeset(Changeset change)
