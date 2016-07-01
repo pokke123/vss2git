@@ -96,6 +96,7 @@ namespace Hpdi.Vss2Git
 
         private void OpenLog(string filename)
         {
+            logger?.Dispose();
             logger = string.IsNullOrEmpty(filename) ? Logger.Null : new Logger(filename);
         }
 
