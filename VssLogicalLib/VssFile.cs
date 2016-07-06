@@ -16,6 +16,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Hpdi.VssPhysicalLib;
 
 namespace Hpdi.VssLogicalLib
@@ -24,6 +25,7 @@ namespace Hpdi.VssLogicalLib
     /// Represents a VSS file.
     /// </summary>
     /// <author>Trevor Robinson</author>
+    [DebuggerDisplay("VssFile: file = {Name}")]
     public class VssFile : VssItem
     {
         public bool IsLocked

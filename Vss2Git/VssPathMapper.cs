@@ -26,6 +26,7 @@ namespace Hpdi.Vss2Git
     /// Base class for representing VSS items.
     /// </summary>
     /// <author>Trevor Robinson</author>
+    [DebuggerDisplay("DebuggerDisplay: {LogicalName} [{PhysicalName}] (Destroyed: {Destroyed})")]
     class VssItemInfo
     {
         private readonly string physicalName;
@@ -59,6 +60,7 @@ namespace Hpdi.Vss2Git
     /// Represents the current state of a VSS project.
     /// </summary>
     /// <author>Trevor Robinson</author>
+    [DebuggerDisplay("VssProjectInfo: {LogicalName} [{PhysicalName}] (Destroyed: {Destroyed}); Items[{Items.Count}] (root = {IsRoot})")]
     class VssProjectInfo : VssItemInfo
     {
         private VssProjectInfo parentInfo;
@@ -266,6 +268,7 @@ namespace Hpdi.Vss2Git
     /// Represents the current state of a VSS file.
     /// </summary>
     /// <author>Trevor Robinson</author>
+    [DebuggerDisplay("VssFileInfo: {LogicalName} [{PhysicalName}] (Destroyed: {Destroyed}); Version = {Version}")]
     class VssFileInfo : VssItemInfo
     {
         private readonly List<VssProjectInfo> projects = new List<VssProjectInfo>();
@@ -301,6 +304,7 @@ namespace Hpdi.Vss2Git
     /// Tracks the names and locations of VSS projects and files as revisions are replayed.
     /// </summary>
     /// <author>Trevor Robinson</author>
+    [DebuggerDisplay("VssPathMapper: ProjectInfo[{projectInfos.Count}], RootInfo[{rootInfos.Count}], FileInfo[{fileInfos.Count}]")]
     class VssPathMapper
     {
         // keyed by physical name

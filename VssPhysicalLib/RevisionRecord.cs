@@ -14,6 +14,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace Hpdi.VssPhysicalLib
@@ -56,6 +57,7 @@ namespace Hpdi.VssPhysicalLib
     /// VSS record representing a project/file revision.
     /// </summary>
     /// <author>Trevor Robinson</author>
+    [DebuggerDisplay("RevisionRecord: {dateTime}, revision: {revision}, action: {action}")]
     public class RevisionRecord : VssRecord
     {
         public const string SIGNATURE = "EL";
@@ -130,6 +132,7 @@ namespace Hpdi.VssPhysicalLib
         }
     }
 
+    [DebuggerDisplay("CommonRevisionRecord: {Name.ShortName}; {dateTime}, revision: {revision}, action: {action}")]
     public class CommonRevisionRecord : RevisionRecord
     {
         VssName name;
@@ -154,6 +157,7 @@ namespace Hpdi.VssPhysicalLib
         }
     }
 
+    [DebuggerDisplay("DestroyRevisionRecord: {Name.ShortName}; {dateTime}, revision: {revision}, action: {action}")]
     public class DestroyRevisionRecord : RevisionRecord
     {
         VssName name;
@@ -180,6 +184,7 @@ namespace Hpdi.VssPhysicalLib
         }
     }
 
+    [DebuggerDisplay("RenameRevisionRecord: {OldName.ShortName} --> {Name.ShortName}; {dateTime}, revision: {revision}, action: {action}")]
     public class RenameRevisionRecord : RevisionRecord
     {
         VssName name;
@@ -208,6 +213,7 @@ namespace Hpdi.VssPhysicalLib
         }
     }
 
+    [DebuggerDisplay("MoveRevisionRecord: {Name.ShortName} (path: {ProjectPath}); {dateTime}, revision: {revision}, action: {action}")]
     public class MoveRevisionRecord : RevisionRecord
     {
         string projectPath;
@@ -236,6 +242,7 @@ namespace Hpdi.VssPhysicalLib
         }
     }
 
+    [DebuggerDisplay("ShareRevisionRecord: {Name.ShortName} (path: {ProjectPath}); {dateTime}, revision: {revision}, action: {action}")]
     public class ShareRevisionRecord : RevisionRecord
     {
         string projectPath;
@@ -280,6 +287,7 @@ namespace Hpdi.VssPhysicalLib
         }
     }
 
+    [DebuggerDisplay("BranchRevisionRecord: {Name.ShortName} (BranchFile: {BranchFile}); {dateTime}, revision: {revision}, action: {action}")]
     public class BranchRevisionRecord : RevisionRecord
     {
         VssName name;
@@ -308,6 +316,7 @@ namespace Hpdi.VssPhysicalLib
         }
     }
 
+    [DebuggerDisplay("EditRevisionRecord: {projectPath}; {dateTime}, revision: {revision}, action: {action}")]
     public class EditRevisionRecord : RevisionRecord
     {
         int prevDeltaOffset;
@@ -334,6 +343,7 @@ namespace Hpdi.VssPhysicalLib
         }
     }
 
+    [DebuggerDisplay("ArchiveRevisionRecord: {Name.ShortName} (ArchivePath: {ArchivePath}); {dateTime}, revision: {revision}, action: {action}")]
     public class ArchiveRevisionRecord : RevisionRecord
     {
         VssName name;

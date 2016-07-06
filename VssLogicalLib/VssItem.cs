@@ -16,6 +16,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Hpdi.VssPhysicalLib;
 
 namespace Hpdi.VssLogicalLib
@@ -24,6 +25,7 @@ namespace Hpdi.VssLogicalLib
     /// Represents an abstract VSS item, which is a project or file.
     /// </summary>
     /// <author>Trevor Robinson</author>
+    [DebuggerDisplay("VssItem(A): {Name}")]
     public abstract class VssItem
     {
         protected readonly VssDatabase database;
