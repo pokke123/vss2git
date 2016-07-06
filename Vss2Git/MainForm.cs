@@ -242,7 +242,7 @@ namespace Hpdi.Vss2Git
             if (vcsType.Equals(vcsTypeGit))
             {
                 GitWrapper wrapper = new GitWrapper(repoPath, logger, commitEncoding, forceAnnotatedCheckBox.Checked);
-                wrapper.GitIgnoreInfo = $"{ignoreFile.Text}|{userName.Text}|{userEmail.Text}|{initialComment.Text}";
+                wrapper.GitIgnoreInfo = $"{ignoreFile.Text}|{attributesFile.Text}|{userName.Text}|{userEmail.Text}|{initialComment.Text}";
                 return wrapper;
             }
             else if (vcsType.Equals(vcsTypeSvn))
@@ -488,6 +488,7 @@ namespace Hpdi.Vss2Git
             svnTagsTextBox.Text = settings.SvnTags;
             svnBranchesTextBox.Text = settings.SvnBranches;
             ignoreFile.Text = settings.GitFirstCommitIgnoreFile;
+            attributesFile.Text = settings.GitFirstCommitAttributesFile;
             userName.Text = settings.GitFirstCommitUserName;
             userEmail.Text = settings.GitFirstCommitUserMail;
             initialComment.Text = settings.GitFirstCommitComment;
@@ -530,6 +531,7 @@ namespace Hpdi.Vss2Git
             settings.SvnTags = svnTagsTextBox.Text;
             settings.SvnBranches = svnBranchesTextBox.Text;
             settings.GitFirstCommitIgnoreFile = ignoreFile.Text;
+            settings.GitFirstCommitAttributesFile = attributesFile.Text;
             settings.GitFirstCommitUserName = userName.Text;
             settings.GitFirstCommitUserMail = userEmail.Text;
             settings.GitFirstCommitComment = initialComment.Text;
@@ -735,6 +737,30 @@ namespace Hpdi.Vss2Git
                     dlg.Multiselect = false;
                     dlg.Filter = "git ignore file|.gitignore";
                     dlg.Title = "Select initial .gitignore file";
+                    if (dlg.ShowDialog() == DialogResult.OK)
+                    {
+                        this.ignoreFile.Text = dlg.FileName;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "VSS2Git", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void GitattributeFileButton_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dlg = new OpenFileDialog())
+            {
+                try
+                {
+                    dlg.FileName = this.ignoreFile.Text;
+                    dlg.CheckPathExists = true;
+                    dlg.CheckFileExists = true;
+                    dlg.Multiselect = false;
+                    dlg.Filter = "git attributes file|.gitattributes";
+                    dlg.Title = "Select initial .gitattributes file";
                     if (dlg.ShowDialog() == DialogResult.OK)
                     {
                         this.ignoreFile.Text = dlg.FileName;

@@ -33,6 +33,7 @@ namespace Hpdi.Vss2Git
         public static readonly string gitMetaDir = ".git";
         public static readonly string gitExecutable = "git";
         public const string gitIgnoreFile = ".gitignore";
+        public const string gitAttributesFile = ".gitattributes";
 
         private List<String> addQueue = new List<string>();
         private List<String> deleteQueue = new List<string>();
@@ -89,19 +90,41 @@ namespace Hpdi.Vss2Git
             if ((!object.ReferenceEquals(changeset, null)) && (!string.IsNullOrEmpty(gitIgnoreInfo)))
             {
                 string[] data = gitIgnoreInfo.Trim().Trim('|').Split('|');
-                if (data.Length == 4)
+                if (data.Length == 5)
                 {
-                    string file = Path.Combine(data[0], gitIgnoreFile);
-                    if (!File.Exists(file))
-                    {
-                        file = data[0];
+                    bool addFirstCommit = false;
+                    if (!string.IsNullOrWhiteSpace(data[0]))
+                    { 
+                        string myIgnoreFile = Path.Combine(data[0], gitIgnoreFile);
+                        if (!File.Exists(myIgnoreFile))
+                        {
+                            myIgnoreFile = data[0];
+                        }
+                        if (File.Exists(myIgnoreFile))
+                        {
+                            File.Copy(myIgnoreFile, Path.Combine(repoPath, gitIgnoreFile), true);
+                            addFirstCommit = true;
+                            //DoAdd(gitIgnoreFile);
+                        }
                     }
-                    if (File.Exists(file))
+                    if (!string.IsNullOrWhiteSpace(data[1]))
+                    { 
+                        string myAttrFile = Path.Combine(data[1], gitAttributesFile);
+                        if (!File.Exists(myAttrFile))
+                        {
+                            myAttrFile = data[1];
+                        }
+                        if (File.Exists(myAttrFile))
+                        {
+                            File.Copy(myAttrFile, Path.Combine(repoPath, gitAttributesFile), true);
+                            addFirstCommit = true;
+                            //DoAdd(gitAttributesFile);
+                        }
+                    }
+                    if (addFirstCommit)
                     {
-                        File.Copy(file, Path.Combine(repoPath, gitIgnoreFile), true);
-                        //DoAdd(gitIgnoreFile);
                         AddAll();
-                        Commit(data[1], data[2], data[3], changeset.DateTime.AddHours(-2));
+                        Commit(data[2], data[3], data[4], changeset.DateTime.AddHours(-2));
                     }
                 }
             }

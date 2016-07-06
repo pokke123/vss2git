@@ -54,6 +54,9 @@
             this.resetRepoCheckBox = new System.Windows.Forms.CheckBox();
             this.vcsSetttingsTabs = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.gitattributesFileButton = new System.Windows.Forms.Button();
+            this.attributesFile = new System.Windows.Forms.TextBox();
+            this.attributesFileLabel = new System.Windows.Forms.Label();
             this.initialComment = new System.Windows.Forms.TextBox();
             this.initialCommentLabel = new System.Windows.Forms.Label();
             this.gitignoreFileButton = new System.Windows.Forms.Button();
@@ -355,6 +358,9 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.gitattributesFileButton);
+            this.tabPage1.Controls.Add(this.attributesFile);
+            this.tabPage1.Controls.Add(this.attributesFileLabel);
             this.tabPage1.Controls.Add(this.initialComment);
             this.tabPage1.Controls.Add(this.initialCommentLabel);
             this.tabPage1.Controls.Add(this.gitignoreFileButton);
@@ -373,6 +379,35 @@
             this.tabPage1.Text = "git";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // gitattributesFileButton
+            // 
+            this.gitattributesFileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.gitattributesFileButton.Image = ((System.Drawing.Image)(resources.GetObject("gitattributesFileButton.Image")));
+            this.gitattributesFileButton.Location = new System.Drawing.Point(508, 50);
+            this.gitattributesFileButton.Name = "gitattributesFileButton";
+            this.gitattributesFileButton.Size = new System.Drawing.Size(23, 23);
+            this.gitattributesFileButton.TabIndex = 6;
+            this.gitattributesFileButton.UseVisualStyleBackColor = true;
+            this.gitattributesFileButton.Click += new System.EventHandler(this.GitattributeFileButton_Click);
+            // 
+            // attributesFile
+            // 
+            this.attributesFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                  | System.Windows.Forms.AnchorStyles.Right)));
+            this.attributesFile.Location = new System.Drawing.Point(78, 52);
+            this.attributesFile.Name = "attributesFile";
+            this.attributesFile.Size = new System.Drawing.Size(424, 20);
+            this.attributesFile.TabIndex = 5;
+            // 
+            // attributesFileLabel
+            // 
+            this.attributesFileLabel.AutoSize = true;
+            this.attributesFileLabel.Location = new System.Drawing.Point(6, 55);
+            this.attributesFileLabel.Name = "attributesFileLabel";
+            this.attributesFileLabel.Size = new System.Drawing.Size(67, 13);
+            this.attributesFileLabel.TabIndex = 4;
+            this.attributesFileLabel.Text = "Attributes file";
+            // 
             // initialComment
             // 
             this.initialComment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -380,7 +415,7 @@
             this.initialComment.Location = new System.Drawing.Point(78, 105);
             this.initialComment.Name = "initialComment";
             this.initialComment.Size = new System.Drawing.Size(453, 20);
-            this.initialComment.TabIndex = 16;
+            this.initialComment.TabIndex = 12;
             // 
             // initialCommentLabel
             // 
@@ -388,7 +423,7 @@
             this.initialCommentLabel.Location = new System.Drawing.Point(6, 108);
             this.initialCommentLabel.Name = "initialCommentLabel";
             this.initialCommentLabel.Size = new System.Drawing.Size(51, 13);
-            this.initialCommentLabel.TabIndex = 15;
+            this.initialCommentLabel.TabIndex = 11;
             this.initialCommentLabel.Text = "Comment";
             // 
             // gitignoreFileButton
@@ -398,26 +433,24 @@
             this.gitignoreFileButton.Location = new System.Drawing.Point(508, 24);
             this.gitignoreFileButton.Name = "gitignoreFileButton";
             this.gitignoreFileButton.Size = new System.Drawing.Size(23, 23);
-            this.gitignoreFileButton.TabIndex = 10;
+            this.gitignoreFileButton.TabIndex = 3;
             this.gitignoreFileButton.UseVisualStyleBackColor = true;
             this.gitignoreFileButton.Click += new System.EventHandler(this.GitignoreFileButton_Click);
             // 
             // userName
             // 
-            this.userName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.userName.Location = new System.Drawing.Point(78, 52);
+            this.userName.Location = new System.Drawing.Point(78, 79);
             this.userName.Name = "userName";
-            this.userName.Size = new System.Drawing.Size(453, 20);
-            this.userName.TabIndex = 12;
+            this.userName.Size = new System.Drawing.Size(184, 20);
+            this.userName.TabIndex = 8;
             // 
             // userNameLabel
             // 
             this.userNameLabel.AutoSize = true;
-            this.userNameLabel.Location = new System.Drawing.Point(6, 55);
+            this.userNameLabel.Location = new System.Drawing.Point(6, 82);
             this.userNameLabel.Name = "userNameLabel";
             this.userNameLabel.Size = new System.Drawing.Size(58, 13);
-            this.userNameLabel.TabIndex = 11;
+            this.userNameLabel.TabIndex = 7;
             this.userNameLabel.Text = "User name";
             // 
             // ignoreFile
@@ -427,7 +460,7 @@
             this.ignoreFile.Location = new System.Drawing.Point(78, 26);
             this.ignoreFile.Name = "ignoreFile";
             this.ignoreFile.Size = new System.Drawing.Size(424, 20);
-            this.ignoreFile.TabIndex = 9;
+            this.ignoreFile.TabIndex = 2;
             // 
             // ignoreFileLabel
             // 
@@ -435,25 +468,25 @@
             this.ignoreFileLabel.Location = new System.Drawing.Point(6, 29);
             this.ignoreFileLabel.Name = "ignoreFileLabel";
             this.ignoreFileLabel.Size = new System.Drawing.Size(53, 13);
-            this.ignoreFileLabel.TabIndex = 8;
+            this.ignoreFileLabel.TabIndex = 1;
             this.ignoreFileLabel.Text = "Ignore file";
             // 
             // userEmail
             // 
             this.userEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.userEmail.Location = new System.Drawing.Point(78, 79);
+            this.userEmail.Location = new System.Drawing.Point(330, 79);
             this.userEmail.Name = "userEmail";
-            this.userEmail.Size = new System.Drawing.Size(453, 20);
-            this.userEmail.TabIndex = 14;
+            this.userEmail.Size = new System.Drawing.Size(201, 20);
+            this.userEmail.TabIndex = 10;
             // 
             // userEmailLabel
             // 
             this.userEmailLabel.AutoSize = true;
-            this.userEmailLabel.Location = new System.Drawing.Point(6, 82);
+            this.userEmailLabel.Location = new System.Drawing.Point(268, 82);
             this.userEmailLabel.Name = "userEmailLabel";
             this.userEmailLabel.Size = new System.Drawing.Size(56, 13);
-            this.userEmailLabel.TabIndex = 13;
+            this.userEmailLabel.TabIndex = 9;
             this.userEmailLabel.Text = "User email";
             // 
             // forceAnnotatedCheckBox
@@ -464,7 +497,7 @@
             this.forceAnnotatedCheckBox.Location = new System.Drawing.Point(6, 6);
             this.forceAnnotatedCheckBox.Name = "forceAnnotatedCheckBox";
             this.forceAnnotatedCheckBox.Size = new System.Drawing.Size(191, 17);
-            this.forceAnnotatedCheckBox.TabIndex = 7;
+            this.forceAnnotatedCheckBox.TabIndex = 0;
             this.forceAnnotatedCheckBox.Text = "Force use of annotated tag objects";
             this.forceAnnotatedCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -963,6 +996,9 @@
         private System.Windows.Forms.Label userEmailLabel;
         private System.Windows.Forms.TextBox initialComment;
         private System.Windows.Forms.Label initialCommentLabel;
+        private System.Windows.Forms.Button gitattributesFileButton;
+        private System.Windows.Forms.TextBox attributesFile;
+        private System.Windows.Forms.Label attributesFileLabel;
     }
 }
 

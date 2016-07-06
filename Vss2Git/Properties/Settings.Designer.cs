@@ -303,6 +303,19 @@ namespace Hpdi.Vss2Git.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GitFirstCommitAttributesFile
+        {
+            get {
+                return ((string)(this["GitFirstCommitAttributesFile"]));
+            }
+            set {
+                this["GitFirstCommitAttributesFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string GitFirstCommitUserName
         {
             get {
