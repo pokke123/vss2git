@@ -314,7 +314,7 @@
             this.continueSyncCheckBox.Location = new System.Drawing.Point(306, 121);
             this.continueSyncCheckBox.Name = "continueSyncCheckBox";
             this.continueSyncCheckBox.Size = new System.Drawing.Size(183, 17);
-            this.continueSyncCheckBox.TabIndex = 11;
+            this.continueSyncCheckBox.TabIndex = 10;
             this.continueSyncCheckBox.Text = "Continue from last synced commit";
             this.continueSyncCheckBox.UseVisualStyleBackColor = true;
             this.continueSyncCheckBox.CheckedChanged += new System.EventHandler(this.continueSyncCheckBox_CheckedChanged);
@@ -353,7 +353,7 @@
             this.vcsSetttingsTabs.Name = "vcsSetttingsTabs";
             this.vcsSetttingsTabs.SelectedIndex = 0;
             this.vcsSetttingsTabs.Size = new System.Drawing.Size(545, 159);
-            this.vcsSetttingsTabs.TabIndex = 10;
+            this.vcsSetttingsTabs.TabIndex = 11;
             this.vcsSetttingsTabs.SelectedIndexChanged += new System.EventHandler(this.vcsSetttingsTabs_SelectedIndexChanged);
             // 
             // tabPage1
