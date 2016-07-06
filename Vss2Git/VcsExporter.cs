@@ -220,8 +220,7 @@ namespace Hpdi.Vss2Git
                         continue;
                     }
 
-                    var changesetDesc = string.Format(CultureInfo.InvariantCulture,
-                        "changeset {0} from {1}", changesetId, changeset.DateTime);
+                    var changesetDesc = string.Format("changeset {0} from {1:yyyy-MM-dd HH:mm:ss}", changesetId, changeset.DateTime);
 
                     // replay each revision in changeset
                     logger.WriteSectionSeparator();
