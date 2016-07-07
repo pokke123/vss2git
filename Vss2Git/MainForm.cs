@@ -205,6 +205,7 @@ namespace Hpdi.Vss2Git
                     {
                         vcsExporter.CommitEncoding = encoding;
                     }
+                    vcsExporter.TryGenerateCommitMessage = tryGenerateCommitMessageCheckBox.Checked;
                     vcsExporter.ResetRepo = resetRepoCheckBox.Checked;
                     if (vcsExporter.ResetRepo)
                     {
@@ -474,6 +475,7 @@ namespace Hpdi.Vss2Git
             logTextBox.Text = settings.LogFile;
             transcodeCheckBox.Checked = settings.TranscodeComments;
             resetRepoCheckBox.Checked = settings.ResetRepo || settings.ContinueSync;
+            tryGenerateCommitMessageCheckBox.Checked = settings.TryGenerateCommitMessage;
             forceAnnotatedCheckBox.Checked = settings.ForceAnnotatedTags;
             anyCommentUpDown.Value = settings.AnyCommentSeconds;
             sameCommentUpDown.Value = settings.SameCommentSeconds;
@@ -515,6 +517,7 @@ namespace Hpdi.Vss2Git
             settings.LogFile = logTextBox.Text;
             settings.TranscodeComments = transcodeCheckBox.Checked;
             settings.ResetRepo = resetRepoCheckBox.Checked;
+            settings.TryGenerateCommitMessage = tryGenerateCommitMessageCheckBox.Checked;
             settings.ContinueSync = continueSyncCheckBox.Checked;
             settings.ForceAnnotatedTags = forceAnnotatedCheckBox.Checked;
             settings.AnyCommentSeconds = (int)anyCommentUpDown.Value;

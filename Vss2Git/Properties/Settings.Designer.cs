@@ -253,6 +253,18 @@ namespace Hpdi.Vss2Git.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool TryGenerateCommitMessage {
+            get {
+                return ((bool)(this["TryGenerateCommitMessage"]));
+            }
+            set {
+                this["TryGenerateCommitMessage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string SvnProjectPath {
             get {

@@ -59,6 +59,13 @@ namespace Hpdi.Vss2Git
             set { resetRepo = value; }
         }
 
+        private bool tryGenerateCommitMessage = true;
+        public bool TryGenerateCommitMessage
+        {
+            get { return tryGenerateCommitMessage; }
+            set { tryGenerateCommitMessage = value; }
+        }
+
         private Encoding commitEncoding = Encoding.UTF8;
         private DateTime? continueAfter;
 
@@ -808,9 +815,13 @@ namespace Hpdi.Vss2Git
             var result = false;
             AbortRetryIgnore(delegate
             {
+                string comment = changeset.Comment;
+                if (string.IsNullOrWhiteSpace(comment) && this.tryGenerateCommitMessage)
+                    comment = (ChangesetCommentBuilder.GetComment(changeset) ?? DefaultComment);
+                else
+                    comment = DefaultComment;
                 result = vcsWrapper.AddAll() &&
-                    vcsWrapper.Commit(GetUsername(changeset.User), GetEmail(changeset.User),
-                    changeset.Comment ?? DefaultComment, changeset.DateTime);
+                    vcsWrapper.Commit(GetUsername(changeset.User), GetEmail(changeset.User), comment, changeset.DateTime);
             });
             return result;
         }
