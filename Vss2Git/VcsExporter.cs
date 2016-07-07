@@ -816,10 +816,13 @@ namespace Hpdi.Vss2Git
             AbortRetryIgnore(delegate
             {
                 string comment = changeset.Comment;
-                if (string.IsNullOrWhiteSpace(comment) && this.tryGenerateCommitMessage)
-                    comment = (ChangesetCommentBuilder.GetComment(changeset) ?? DefaultComment);
-                else
-                    comment = DefaultComment;
+                if (string.IsNullOrWhiteSpace(comment))
+                {
+                    if (this.tryGenerateCommitMessage)
+                        comment = (ChangesetCommentBuilder.GetComment(changeset) ?? DefaultComment);
+                    else
+                        comment = DefaultComment;
+                }
                 result = vcsWrapper.AddAll() &&
                     vcsWrapper.Commit(GetUsername(changeset.User), GetEmail(changeset.User), comment, changeset.DateTime);
             });
