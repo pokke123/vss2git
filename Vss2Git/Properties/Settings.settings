@@ -68,5 +68,20 @@
     <Setting Name="ContinueSync" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="GitFirstCommitIgnoreFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">trunk</Value>
+    </Setting>
+    <Setting Name="GitFirstCommitAttributesFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">trunk</Value>
+    </Setting>
+    <Setting Name="GitFirstCommitUserName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">trunk</Value>
+    </Setting>
+    <Setting Name="GitFirstCommitUserMail" Type="System.String" Scope="User">
+      <Value Profile="(Default)">trunk</Value>
+    </Setting>
+    <Setting Name="GitFirstCommitComment" Type="System.String" Scope="User">
+      <Value Profile="(Default)">trunk</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

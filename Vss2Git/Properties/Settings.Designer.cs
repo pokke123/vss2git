@@ -289,9 +289,8 @@ namespace Hpdi.Vss2Git.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string GitFirstCommitIgnoreFile
-        {
+        [global::System.Configuration.DefaultSettingValueAttribute("trunk")]
+        public string GitFirstCommitIgnoreFile {
             get {
                 return ((string)(this["GitFirstCommitIgnoreFile"]));
             }
@@ -302,9 +301,8 @@ namespace Hpdi.Vss2Git.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string GitFirstCommitAttributesFile
-        {
+        [global::System.Configuration.DefaultSettingValueAttribute("trunk")]
+        public string GitFirstCommitAttributesFile {
             get {
                 return ((string)(this["GitFirstCommitAttributesFile"]));
             }
@@ -315,9 +313,8 @@ namespace Hpdi.Vss2Git.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string GitFirstCommitUserName
-        {
+        [global::System.Configuration.DefaultSettingValueAttribute("trunk")]
+        public string GitFirstCommitUserName {
             get {
                 return ((string)(this["GitFirstCommitUserName"]));
             }
@@ -328,9 +325,8 @@ namespace Hpdi.Vss2Git.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string GitFirstCommitUserMail
-        {
+        [global::System.Configuration.DefaultSettingValueAttribute("trunk")]
+        public string GitFirstCommitUserMail {
             get {
                 return ((string)(this["GitFirstCommitUserMail"]));
             }
@@ -341,9 +337,8 @@ namespace Hpdi.Vss2Git.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string GitFirstCommitComment
-        {
+        [global::System.Configuration.DefaultSettingValueAttribute("trunk")]
+        public string GitFirstCommitComment {
             get {
                 return ((string)(this["GitFirstCommitComment"]));
             }
