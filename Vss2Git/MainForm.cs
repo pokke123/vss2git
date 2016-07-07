@@ -211,7 +211,6 @@ namespace Hpdi.Vss2Git
                         vcsExporter.ExportToVcs(outDirTextBox.Text, null);
                     }
                     else
-                    if (vcsExporter.ResetRepo)
                     {
                         vcsExporter.ExportToVcs(outDirTextBox.Text, continueAfter);
                     }
