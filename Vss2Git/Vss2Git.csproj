@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractVcsWrapper.cs" />
+    <Compile Include="AdvancedTaskbar.cs" />
     <Compile Include="ChangesetCommentBuilder.cs" />
     <Compile Include="CollectionUtil.cs" />
     <Compile Include="ChangesetBuilder.cs" />

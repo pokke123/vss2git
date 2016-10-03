@@ -25,6 +25,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Hpdi.VssLogicalLib;
 using System.Linq;
+using Elcom.Utils;
 
 namespace Hpdi.Vss2Git
 {
@@ -196,6 +197,7 @@ namespace Hpdi.Vss2Git
                         revisionNo++;
                     }
                     changeSetNo++;
+                    //AdvancedTaskbar.SetPosition((uint)changeSetNo);
                 }
 
                 // replay each changeset
@@ -309,6 +311,7 @@ namespace Hpdi.Vss2Git
                             }
                         }
                     }
+                    AdvancedTaskbar.SetPosition((uint)changesetId);
                 }
 
                 stopwatch.Stop();
@@ -852,21 +855,24 @@ namespace Hpdi.Vss2Git
                 catch (Exception e)
                 {
                     var message = LogException(e);
+                    AdvancedTaskbar.SetErrorState();
 
                     message += "\nSee log file for more information.";
-
                     var button = MessageBox.Show(message, "Error", buttons, MessageBoxIcon.Error);
                     switch (button)
                     {
                         case DialogResult.Retry:
                             retry = true;
+                            AdvancedTaskbar.SetUserResponseState(DialogResult.Retry);
                             break;
                         case DialogResult.Ignore:
                             retry = false;
+                            AdvancedTaskbar.SetUserResponseState(DialogResult.Ignore);
                             break;
                         default:
                             retry = false;
                             workQueue.Abort();
+                            AdvancedTaskbar.SetUserResponseState(DialogResult.Abort);
                             break;
                     }
                 }

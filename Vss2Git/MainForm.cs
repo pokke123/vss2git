@@ -24,6 +24,7 @@ using System.Configuration;
 using System.Globalization;
 using System.Threading;
 using Mono.Options;
+using Elcom.Utils;
 
 namespace Hpdi.Vss2Git
 {
@@ -56,6 +57,7 @@ namespace Hpdi.Vss2Git
         {
             InitializeComponent();
             parseCommandLine(args);
+            AdvancedTaskbar.Init(this);
         }
 
 
@@ -134,6 +136,7 @@ namespace Hpdi.Vss2Git
         {
             try
             {
+                AdvancedTaskbar.EnableItermediate();
                 OpenLog(logTextBox.Text);
 
                 logger.WriteLine("VSS2Git version {0}", Assembly.GetExecutingAssembly().GetName().Version);
@@ -286,6 +289,8 @@ namespace Hpdi.Vss2Git
             if (changesetBuilder != null)
             {
                 changeLabel.Text = "Changesets: " + changesetBuilder.Changesets.Count;
+                if (changesetBuilder.Changesets.Count > 1)
+                    AdvancedTaskbar.EnableProgress((uint)changesetBuilder.Changesets.Count);
             }
 
             if (workQueue.IsIdle)
@@ -299,6 +304,7 @@ namespace Hpdi.Vss2Git
                     LoadRepoSettings();
                 }
                 goButton.Enabled = true;
+                AdvancedTaskbar.Disable();
                 cancelButton.Text = "Close";
                 if (goAndExit && exitOnComplete)
                 {
