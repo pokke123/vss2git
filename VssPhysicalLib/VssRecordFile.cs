@@ -108,31 +108,38 @@ namespace Hpdi.VssPhysicalLib
             bool ignoreUnknown)
             where T : VssRecord
         {
-            RecordHeader recordHeader = new RecordHeader();
-            recordHeader.Read(reader);
-
-            BufferReader recordReader = reader.Extract(recordHeader.Length);
-
-            // comment records always seem to have a zero CRC
-            if (recordHeader.Signature != CommentRecord.SIGNATURE)
+            try
             {
-                recordHeader.CheckCrc();
-            }
+                RecordHeader recordHeader = new RecordHeader();
+                recordHeader.Read(reader);
 
-            T record = creationCallback(recordHeader, recordReader);
-            if (record != null)
-            {
-                // double-check that the object signature matches the file
-                recordHeader.CheckSignature(record.Signature);
-                record.Read(recordReader, recordHeader);
+                BufferReader recordReader = reader.Extract(recordHeader.Length);
+
+                // comment records always seem to have a zero CRC
+                if (recordHeader.Signature != CommentRecord.SIGNATURE)
+                {
+                    recordHeader.CheckCrc();
+                }
+
+                T record = creationCallback(recordHeader, recordReader);
+                if (record != null)
+                {
+                    // double-check that the object signature matches the file
+                    recordHeader.CheckSignature(record.Signature);
+                    record.Read(recordReader, recordHeader);
+                }
+                else if (!ignoreUnknown)
+                {
+                    throw new UnrecognizedRecordException(recordHeader,
+                        string.Format("Unrecognized record signature {0} in item file",
+                        recordHeader.Signature));
+                }
+                return record;
             }
-            else if (!ignoreUnknown)
+            catch (EndOfBufferException e)
             {
-                throw new UnrecognizedRecordException(recordHeader,
-                    string.Format("Unrecognized record signature {0} in item file",
-                    recordHeader.Signature));
+                throw new RecordTruncatedException(e.Message);
             }
-            return record;
         }
 
         protected T GetRecord<T>(
