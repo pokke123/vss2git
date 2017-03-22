@@ -26,6 +26,7 @@ namespace Hpdi.Vss2Git
     /// Base class for representing VSS items.
     /// </summary>
     /// <author>Trevor Robinson</author>
+    [DebuggerDisplay("DebuggerDisplay: {LogicalName} [{PhysicalName}] (Destroyed: {Destroyed})")]
     class VssItemInfo
     {
         private readonly string physicalName;
@@ -59,6 +60,7 @@ namespace Hpdi.Vss2Git
     /// Represents the current state of a VSS project.
     /// </summary>
     /// <author>Trevor Robinson</author>
+    [DebuggerDisplay("VssProjectInfo: {LogicalName} [{PhysicalName}] (Destroyed: {Destroyed}); Items[{Items.Count}] (root = {IsRoot})")]
     class VssProjectInfo : VssItemInfo
     {
         private VssProjectInfo parentInfo;
@@ -161,16 +163,16 @@ namespace Hpdi.Vss2Git
             items.Remove(item);
         }
 
-        public bool ContainsLogicalName(string logicalName)
+        public string TryToGetPhysicalName(string logicalName)
         {
             foreach (var item in items)
             {
                 if (item.LogicalName.Equals(logicalName))
                 {
-                    return true;
+                    return item.PhysicalName;
                 }
             }
-            return false;
+            return null;
         }
 
         public bool ContainsFiles()
@@ -266,6 +268,7 @@ namespace Hpdi.Vss2Git
     /// Represents the current state of a VSS file.
     /// </summary>
     /// <author>Trevor Robinson</author>
+    [DebuggerDisplay("VssFileInfo: {LogicalName} [{PhysicalName}] (Destroyed: {Destroyed}); Version = {Version}")]
     class VssFileInfo : VssItemInfo
     {
         private readonly List<VssProjectInfo> projects = new List<VssProjectInfo>();
@@ -301,6 +304,7 @@ namespace Hpdi.Vss2Git
     /// Tracks the names and locations of VSS projects and files as revisions are replayed.
     /// </summary>
     /// <author>Trevor Robinson</author>
+    [DebuggerDisplay("VssPathMapper: ProjectInfo[{projectInfos.Count}], RootInfo[{rootInfos.Count}], FileInfo[{fileInfos.Count}]")]
     class VssPathMapper
     {
         // keyed by physical name
@@ -540,23 +544,26 @@ namespace Hpdi.Vss2Git
                 if (parentInfo != null)
                 {
                     // propagate the destroyed flag from the new parent
-                    subprojectInfo.Parent = parentInfo;
                     subprojectInfo.Destroyed |= parentInfo.Destroyed;
+                    if (subprojectInfo.Destroyed)
+                    {
+                        // otherwise the parent will be updated in MoveProjectFrom
+                        subprojectInfo.Parent = parentInfo;
+                    }
                 }
-                else
+                else if (IsInMappedSet(newParentSpec))
                 {
                     // if resolution fails, the target project has been destroyed
-                    // or is outside the set of projects being mapped
                     subprojectInfo.Destroyed = true;
                 }
             }
             return subprojectInfo;
         }
 
-        public bool ProjectContainsLogicalName(VssItemName project, VssItemName name)
+        public string TryToGetPhysicalNameContainedInProject(VssItemName project, VssItemName name)
         {
             var parentInfo = GetOrCreateProject(project);
-            return parentInfo.ContainsLogicalName(name.LogicalName);
+            return parentInfo.TryToGetPhysicalName(name.LogicalName);
         }
 
         private VssProjectInfo GetOrCreateProject(VssItemName name)
@@ -579,6 +586,24 @@ namespace Hpdi.Vss2Git
                 fileInfos[name.PhysicalName] = fileInfo;
             }
             return fileInfo;
+        }
+
+        private bool IsInMappedSet(string projectSpec)
+        {
+            if (!projectSpec.StartsWith("$/"))
+            {
+                throw new ArgumentException("Project spec must start with $/", "projectSpec");
+            }
+
+            foreach (var rootInfo in rootInfos.Values)
+            {
+                if (projectSpec.StartsWith(rootInfo.OriginalVssPath))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private VssProjectInfo ResolveProjectSpec(string projectSpec)

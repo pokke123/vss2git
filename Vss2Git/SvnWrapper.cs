@@ -84,6 +84,11 @@ namespace Hpdi.Vss2Git
             }
         }
 
+        public override void Init(Changeset changeset, string repoPath)
+        {
+            
+        }
+
         public override void Configure(bool newRepo)
         {
             if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))

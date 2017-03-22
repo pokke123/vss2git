@@ -24,6 +24,7 @@ using System.Configuration;
 using System.Globalization;
 using System.Threading;
 using Mono.Options;
+using Elcom.Utils;
 
 namespace Hpdi.Vss2Git
 {
@@ -35,6 +36,7 @@ namespace Hpdi.Vss2Git
     {
         public static readonly string vcsTypeGit = "git";
         public static readonly string vcsTypeSvn = "svn";
+        public const string emailPropertiesFileName = "emails.properties";
 
         private readonly Dictionary<int, EncodingInfo> codePages = new Dictionary<int, EncodingInfo>();
         private readonly WorkQueue workQueue = new WorkQueue(1);
@@ -55,6 +57,7 @@ namespace Hpdi.Vss2Git
         {
             InitializeComponent();
             parseCommandLine(args);
+            AdvancedTaskbar.Init(this);
         }
 
 
@@ -95,6 +98,7 @@ namespace Hpdi.Vss2Git
 
         private void OpenLog(string filename)
         {
+            logger?.Dispose();
             logger = string.IsNullOrEmpty(filename) ? Logger.Null : new Logger(filename);
         }
 
@@ -102,7 +106,8 @@ namespace Hpdi.Vss2Git
         {
             Invoke((MethodInvoker)delegate
             {
-                IVcsWrapper vcsWrapper = outDirTextBox.Text.Length > 0 ? CreateVcsWrapper(Encoding.Default) : null;
+                Encoding enc = (transcodeCheckBox.Checked ? Encoding.UTF8 : Encoding.Default);
+                IVcsWrapper vcsWrapper = outDirTextBox.Text.Length > 0 ? CreateVcsWrapper(enc) : null;
                 backgroundQueue.AddLast(delegate
                 {
                     continueAfter = vcsWrapper != null ? vcsWrapper.GetLastCommit() : null;
@@ -131,6 +136,7 @@ namespace Hpdi.Vss2Git
         {
             try
             {
+                AdvancedTaskbar.EnableItermediate();
                 OpenLog(logTextBox.Text);
 
                 logger.WriteLine("VSS2Git version {0}", Assembly.GetExecutingAssembly().GetName().Version);
@@ -174,7 +180,7 @@ namespace Hpdi.Vss2Git
                     return;
                 }
                 // read the emails dictionary
-                var emailDictionary = ReadDictionaryFile("e-mail dictionary", db.BasePath, "emails.properties");
+                var emailDictionary = ReadDictionaryFile("e-mail dictionary", db.BasePath, emailPropertiesFileName);
 
                 revisionAnalyzer = new RevisionAnalyzer(workQueue, logger, db);
                 if (!string.IsNullOrEmpty(excludeTextBox.Text))
@@ -202,8 +208,16 @@ namespace Hpdi.Vss2Git
                     {
                         vcsExporter.CommitEncoding = encoding;
                     }
+                    vcsExporter.TryGenerateCommitMessage = tryGenerateCommitMessageCheckBox.Checked;
                     vcsExporter.ResetRepo = resetRepoCheckBox.Checked;
-                    vcsExporter.ExportToVcs(outDirTextBox.Text, continueAfter);
+                    if (vcsExporter.ResetRepo)
+                    {
+                        vcsExporter.ExportToVcs(outDirTextBox.Text, null);
+                    }
+                    else
+                    {
+                        vcsExporter.ExportToVcs(outDirTextBox.Text, continueAfter);
+                    }
                 }
 
                 workQueue.Idle += delegate
@@ -225,11 +239,14 @@ namespace Hpdi.Vss2Git
 
         private IVcsWrapper CreateVcsWrapper(Encoding commitEncoding)
         {
+            Invoke((MethodInvoker)delegate { if (transcodeCheckBox.Checked) commitEncoding = Encoding.UTF8; } );
             string repoPath = outDirTextBox.Text;
             string vcsType = vcsSetttingsTabs.SelectedTab.Text;
             if (vcsType.Equals(vcsTypeGit))
             {
-                return new GitWrapper(repoPath, logger, commitEncoding, forceAnnotatedCheckBox.Checked);
+                GitWrapper wrapper = new GitWrapper(repoPath, logger, commitEncoding, forceAnnotatedCheckBox.Checked);
+                wrapper.GitIgnoreInfo = $"{ignoreFile.Text}|{attributesFile.Text}|{userName.Text}|{userEmail.Text}|{initialComment.Text}";
+                return wrapper;
             }
             else if (vcsType.Equals(vcsTypeSvn))
             {
@@ -272,6 +289,8 @@ namespace Hpdi.Vss2Git
             if (changesetBuilder != null)
             {
                 changeLabel.Text = "Changesets: " + changesetBuilder.Changesets.Count;
+                if (changesetBuilder.Changesets.Count > 1)
+                    AdvancedTaskbar.EnableProgress((uint)changesetBuilder.Changesets.Count);
             }
 
             if (workQueue.IsIdle)
@@ -285,6 +304,7 @@ namespace Hpdi.Vss2Git
                     LoadRepoSettings();
                 }
                 goButton.Enabled = true;
+                AdvancedTaskbar.Disable();
                 cancelButton.Text = "Close";
                 if (goAndExit && exitOnComplete)
                 {
@@ -329,10 +349,6 @@ namespace Hpdi.Vss2Git
                 description = string.Format("CP{0} - {1}", codePage, encoding.DisplayName);
                 var index = encodingComboBox.Items.Add(description);
                 codePages[index] = encoding;
-                if (codePage == 65001)
-                {
-                    encodingComboBox.SelectedIndex = index;
-                }
                 if (codePage == defaultCodePage)
                 {
                     codePages[defaultIndex] = encoding;
@@ -420,7 +436,10 @@ namespace Hpdi.Vss2Git
             {
                 var settings = Properties.Settings.Default;
                 string lastSettingsFile = settings.LastSettingsFile;
-                settingsOpenFileDialog.InitialDirectory = Path.GetDirectoryName(lastSettingsFile);
+                if (!string.IsNullOrEmpty(lastSettingsFile))
+                {
+                    settingsOpenFileDialog.InitialDirectory = Path.GetDirectoryName(lastSettingsFile);
+                }
                 settingsOpenFileDialog.FileName = Path.GetFileName(lastSettingsFile);
                 if (DialogResult.OK == settingsOpenFileDialog.ShowDialog(this))
                 {
@@ -462,6 +481,7 @@ namespace Hpdi.Vss2Git
             logTextBox.Text = settings.LogFile;
             transcodeCheckBox.Checked = settings.TranscodeComments;
             resetRepoCheckBox.Checked = settings.ResetRepo || settings.ContinueSync;
+            tryGenerateCommitMessageCheckBox.Checked = settings.TryGenerateCommitMessage;
             forceAnnotatedCheckBox.Checked = settings.ForceAnnotatedTags;
             anyCommentUpDown.Value = settings.AnyCommentSeconds;
             sameCommentUpDown.Value = settings.SameCommentSeconds;
@@ -474,6 +494,11 @@ namespace Hpdi.Vss2Git
             svnTrunkTextBox.Text = settings.SvnTrunk;
             svnTagsTextBox.Text = settings.SvnTags;
             svnBranchesTextBox.Text = settings.SvnBranches;
+            ignoreFile.Text = settings.GitFirstCommitIgnoreFile;
+            attributesFile.Text = settings.GitFirstCommitAttributesFile;
+            userName.Text = settings.GitFirstCommitUserName;
+            userEmail.Text = settings.GitFirstCommitUserMail;
+            initialComment.Text = settings.GitFirstCommitComment;
 
             int index = 0;
             int count = vcsSetttingsTabs.TabPages.Count;
@@ -498,6 +523,7 @@ namespace Hpdi.Vss2Git
             settings.LogFile = logTextBox.Text;
             settings.TranscodeComments = transcodeCheckBox.Checked;
             settings.ResetRepo = resetRepoCheckBox.Checked;
+            settings.TryGenerateCommitMessage = tryGenerateCommitMessageCheckBox.Checked;
             settings.ContinueSync = continueSyncCheckBox.Checked;
             settings.ForceAnnotatedTags = forceAnnotatedCheckBox.Checked;
             settings.AnyCommentSeconds = (int)anyCommentUpDown.Value;
@@ -512,6 +538,11 @@ namespace Hpdi.Vss2Git
             settings.SvnTrunk = svnTrunkTextBox.Text;
             settings.SvnTags = svnTagsTextBox.Text;
             settings.SvnBranches = svnBranchesTextBox.Text;
+            settings.GitFirstCommitIgnoreFile = ignoreFile.Text;
+            settings.GitFirstCommitAttributesFile = attributesFile.Text;
+            settings.GitFirstCommitUserName = userName.Text;
+            settings.GitFirstCommitUserMail = userEmail.Text;
+            settings.GitFirstCommitComment = initialComment.Text;
         }
 
         private IDictionary<string, string> ReadDictionaryFile(string fileKind, string repoPath, string fileName)
@@ -595,7 +626,7 @@ namespace Hpdi.Vss2Git
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            var emailDictionary = ReadDictionaryFile("e-mail dictionary", db.BasePath, "emails.properties");
+            var emailDictionary = ReadDictionaryFile("e-mail dictionary", db.BasePath, emailPropertiesFileName);
 
             revisionAnalyzer = new RevisionAnalyzer(workQueue, logger, db);
             if (!string.IsNullOrEmpty(excludeTextBox.Text))
@@ -615,7 +646,7 @@ namespace Hpdi.Vss2Git
                         emailDictionary.Add(user, "");
                     }
                 }
-                string propsPath = db.BasePath + Path.DirectorySeparatorChar + "emails.properties";
+                string propsPath = Path.Combine(db.BasePath, emailPropertiesFileName);
                 WriteDictionaryFile(emailDictionary, propsPath);
                 MessageBox.Show("The list of usernames is written to:\n\n"
                     + propsPath + "\n\n"
@@ -700,6 +731,54 @@ namespace Hpdi.Vss2Git
         private void vcsSetttingsTabs_SelectedIndexChanged(object sender, EventArgs e)
         {
             LoadRepoSettings();
+        }
+
+        private void GitignoreFileButton_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dlg = new OpenFileDialog())
+            {
+                try
+                {
+                    dlg.FileName = this.ignoreFile.Text;
+                    dlg.CheckPathExists = true;
+                    dlg.CheckFileExists = true;
+                    dlg.Multiselect = false;
+                    dlg.Filter = "git ignore file|.gitignore";
+                    dlg.Title = "Select initial .gitignore file";
+                    if (dlg.ShowDialog() == DialogResult.OK)
+                    {
+                        this.ignoreFile.Text = dlg.FileName;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "VSS2Git", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void GitattributeFileButton_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dlg = new OpenFileDialog())
+            {
+                try
+                {
+                    dlg.FileName = this.ignoreFile.Text;
+                    dlg.CheckPathExists = true;
+                    dlg.CheckFileExists = true;
+                    dlg.Multiselect = false;
+                    dlg.Filter = "git attributes file|.gitattributes";
+                    dlg.Title = "Select initial .gitattributes file";
+                    if (dlg.ShowDialog() == DialogResult.OK)
+                    {
+                        this.ignoreFile.Text = dlg.FileName;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "VSS2Git", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

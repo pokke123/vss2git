@@ -16,6 +16,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Hpdi.VssPhysicalLib;
 
 namespace Hpdi.VssLogicalLib
@@ -24,6 +25,7 @@ namespace Hpdi.VssLogicalLib
     /// Represents a VSS project.
     /// </summary>
     /// <author>Trevor Robinson</author>
+    [DebuggerDisplay("VssProject: {Path} / {Name}")]
     public class VssProject : VssItem
     {
         private readonly string logicalPath;
@@ -46,6 +48,11 @@ namespace Hpdi.VssLogicalLib
         public new IEnumerable<VssProjectRevision> Revisions
         {
             get { return new VssRevisions<VssProject, VssProjectRevision>(this); }
+        }
+
+        public VssFile GetHistoricalFile(string physicalName, string logicalName)
+        {
+            return database.OpenFile(physicalName, logicalName);
         }
 
         public new VssProjectRevision GetRevision(int version)

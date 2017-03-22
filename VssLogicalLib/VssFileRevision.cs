@@ -14,6 +14,7 @@
  */
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using Hpdi.VssPhysicalLib;
 
@@ -23,6 +24,7 @@ namespace Hpdi.VssLogicalLib
     /// Represents a revision of a VSS file.
     /// </summary>
     /// <author>Trevor Robinson</author>
+    [DebuggerDisplay("VssFileRevision: {File.Name}")]
     public class VssFileRevision : VssRevision
     {
         public VssFile File

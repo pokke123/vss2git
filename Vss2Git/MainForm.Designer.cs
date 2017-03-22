@@ -49,11 +49,24 @@
             this.changeLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.timeLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.outputGroupBox = new System.Windows.Forms.GroupBox();
+            this.tryGenerateCommitMessageCheckBox = new System.Windows.Forms.CheckBox();
             this.continueSyncCheckBox = new System.Windows.Forms.CheckBox();
             this.outDirButton = new System.Windows.Forms.Button();
             this.resetRepoCheckBox = new System.Windows.Forms.CheckBox();
             this.vcsSetttingsTabs = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.gitattributesFileButton = new System.Windows.Forms.Button();
+            this.attributesFile = new System.Windows.Forms.TextBox();
+            this.attributesFileLabel = new System.Windows.Forms.Label();
+            this.initialComment = new System.Windows.Forms.TextBox();
+            this.initialCommentLabel = new System.Windows.Forms.Label();
+            this.gitignoreFileButton = new System.Windows.Forms.Button();
+            this.userName = new System.Windows.Forms.TextBox();
+            this.userNameLabel = new System.Windows.Forms.Label();
+            this.ignoreFile = new System.Windows.Forms.TextBox();
+            this.ignoreFileLabel = new System.Windows.Forms.Label();
+            this.userEmail = new System.Windows.Forms.TextBox();
+            this.userEmailLabel = new System.Windows.Forms.Label();
             this.forceAnnotatedCheckBox = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.svnRepoButton = new System.Windows.Forms.Button();
@@ -122,15 +135,16 @@
             this.vssGroupBox.Controls.Add(this.vssDirLabel);
             this.vssGroupBox.Location = new System.Drawing.Point(12, 12);
             this.vssGroupBox.Name = "vssGroupBox";
-            this.vssGroupBox.Size = new System.Drawing.Size(560, 126);
+            this.vssGroupBox.Size = new System.Drawing.Size(620, 126);
             this.vssGroupBox.TabIndex = 0;
             this.vssGroupBox.TabStop = false;
             this.vssGroupBox.Text = "VSS Settings";
             // 
             // vssDirButton
             // 
+            this.vssDirButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.vssDirButton.Image = ((System.Drawing.Image)(resources.GetObject("vssDirButton.Image")));
-            this.vssDirButton.Location = new System.Drawing.Point(531, 17);
+            this.vssDirButton.Location = new System.Drawing.Point(591, 17);
             this.vssDirButton.Name = "vssDirButton";
             this.vssDirButton.Size = new System.Drawing.Size(23, 23);
             this.vssDirButton.TabIndex = 2;
@@ -154,7 +168,7 @@
             this.encodingComboBox.FormattingEnabled = true;
             this.encodingComboBox.Location = new System.Drawing.Point(90, 97);
             this.encodingComboBox.Name = "encodingComboBox";
-            this.encodingComboBox.Size = new System.Drawing.Size(464, 21);
+            this.encodingComboBox.Size = new System.Drawing.Size(524, 21);
             this.encodingComboBox.TabIndex = 8;
             // 
             // excludeTextBox
@@ -163,7 +177,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.excludeTextBox.Location = new System.Drawing.Point(90, 71);
             this.excludeTextBox.Name = "excludeTextBox";
-            this.excludeTextBox.Size = new System.Drawing.Size(464, 20);
+            this.excludeTextBox.Size = new System.Drawing.Size(524, 20);
             this.excludeTextBox.TabIndex = 6;
             // 
             // excludeLabel
@@ -181,7 +195,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.vssProjectTextBox.Location = new System.Drawing.Point(90, 45);
             this.vssProjectTextBox.Name = "vssProjectTextBox";
-            this.vssProjectTextBox.Size = new System.Drawing.Size(464, 20);
+            this.vssProjectTextBox.Size = new System.Drawing.Size(524, 20);
             this.vssProjectTextBox.TabIndex = 4;
             // 
             // vssDirTextBox
@@ -190,7 +204,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.vssDirTextBox.Location = new System.Drawing.Point(90, 19);
             this.vssDirTextBox.Name = "vssDirTextBox";
-            this.vssDirTextBox.Size = new System.Drawing.Size(435, 20);
+            this.vssDirTextBox.Size = new System.Drawing.Size(495, 20);
             this.vssDirTextBox.TabIndex = 1;
             // 
             // vssProjectLabel
@@ -213,8 +227,8 @@
             // 
             // goButton
             // 
-            this.goButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.goButton.Location = new System.Drawing.Point(416, 545);
+            this.goButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.goButton.Location = new System.Drawing.Point(476, 565);
             this.goButton.Name = "goButton";
             this.goButton.Size = new System.Drawing.Size(75, 23);
             this.goButton.TabIndex = 3;
@@ -234,16 +248,16 @@
             this.revisionLabel,
             this.changeLabel,
             this.timeLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 576);
+            this.statusStrip.Location = new System.Drawing.Point(0, 596);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(584, 22);
+            this.statusStrip.Size = new System.Drawing.Size(644, 22);
             this.statusStrip.TabIndex = 5;
             this.statusStrip.Text = "statusStrip1";
             // 
             // statusLabel
             // 
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(284, 17);
+            this.statusLabel.Size = new System.Drawing.Size(344, 17);
             this.statusLabel.Spring = true;
             this.statusLabel.Text = "Idle";
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -276,6 +290,7 @@
             // 
             this.outputGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.outputGroupBox.Controls.Add(this.tryGenerateCommitMessageCheckBox);
             this.outputGroupBox.Controls.Add(this.continueSyncCheckBox);
             this.outputGroupBox.Controls.Add(this.outDirButton);
             this.outputGroupBox.Controls.Add(this.resetRepoCheckBox);
@@ -290,10 +305,22 @@
             this.outputGroupBox.Controls.Add(this.logLabel);
             this.outputGroupBox.Location = new System.Drawing.Point(12, 138);
             this.outputGroupBox.Name = "outputGroupBox";
-            this.outputGroupBox.Size = new System.Drawing.Size(560, 320);
+            this.outputGroupBox.Size = new System.Drawing.Size(620, 340);
             this.outputGroupBox.TabIndex = 1;
             this.outputGroupBox.TabStop = false;
             this.outputGroupBox.Text = "Output Settings";
+            // 
+            // tryGenerateCommitMessageCheckBox
+            // 
+            this.tryGenerateCommitMessageCheckBox.AutoSize = true;
+            this.tryGenerateCommitMessageCheckBox.Checked = true;
+            this.tryGenerateCommitMessageCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tryGenerateCommitMessageCheckBox.Location = new System.Drawing.Point(9, 121);
+            this.tryGenerateCommitMessageCheckBox.Name = "tryGenerateCommitMessageCheckBox";
+            this.tryGenerateCommitMessageCheckBox.Size = new System.Drawing.Size(246, 17);
+            this.tryGenerateCommitMessageCheckBox.TabIndex = 8;
+            this.tryGenerateCommitMessageCheckBox.Text = "Replace empty comments with VSS operations";
+            this.tryGenerateCommitMessageCheckBox.UseVisualStyleBackColor = true;
             // 
             // continueSyncCheckBox
             // 
@@ -301,15 +328,16 @@
             this.continueSyncCheckBox.Location = new System.Drawing.Point(306, 121);
             this.continueSyncCheckBox.Name = "continueSyncCheckBox";
             this.continueSyncCheckBox.Size = new System.Drawing.Size(183, 17);
-            this.continueSyncCheckBox.TabIndex = 11;
+            this.continueSyncCheckBox.TabIndex = 10;
             this.continueSyncCheckBox.Text = "Continue from last synced commit";
             this.continueSyncCheckBox.UseVisualStyleBackColor = true;
             this.continueSyncCheckBox.CheckedChanged += new System.EventHandler(this.continueSyncCheckBox_CheckedChanged);
             // 
             // outDirButton
             // 
+            this.outDirButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.outDirButton.Image = ((System.Drawing.Image)(resources.GetObject("outDirButton.Image")));
-            this.outDirButton.Location = new System.Drawing.Point(531, 17);
+            this.outDirButton.Location = new System.Drawing.Point(591, 17);
             this.outDirButton.Name = "outDirButton";
             this.outDirButton.Size = new System.Drawing.Size(23, 23);
             this.outDirButton.TabIndex = 2;
@@ -324,32 +352,156 @@
             this.resetRepoCheckBox.Location = new System.Drawing.Point(306, 98);
             this.resetRepoCheckBox.Name = "resetRepoCheckBox";
             this.resetRepoCheckBox.Size = new System.Drawing.Size(173, 17);
-            this.resetRepoCheckBox.TabIndex = 8;
+            this.resetRepoCheckBox.TabIndex = 9;
             this.resetRepoCheckBox.Text = "Reset Repository before Export";
             this.resetRepoCheckBox.UseVisualStyleBackColor = true;
             this.resetRepoCheckBox.CheckedChanged += new System.EventHandler(this.resetRepoCheckBox_CheckedChanged);
             // 
             // vcsSetttingsTabs
             // 
+            this.vcsSetttingsTabs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.vcsSetttingsTabs.Controls.Add(this.tabPage1);
             this.vcsSetttingsTabs.Controls.Add(this.tabPage2);
-            this.vcsSetttingsTabs.Location = new System.Drawing.Point(9, 154);
+            this.vcsSetttingsTabs.Location = new System.Drawing.Point(9, 174);
             this.vcsSetttingsTabs.Name = "vcsSetttingsTabs";
             this.vcsSetttingsTabs.SelectedIndex = 0;
-            this.vcsSetttingsTabs.Size = new System.Drawing.Size(545, 159);
-            this.vcsSetttingsTabs.TabIndex = 10;
+            this.vcsSetttingsTabs.Size = new System.Drawing.Size(605, 159);
+            this.vcsSetttingsTabs.TabIndex = 12;
             this.vcsSetttingsTabs.SelectedIndexChanged += new System.EventHandler(this.vcsSetttingsTabs_SelectedIndexChanged);
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.gitattributesFileButton);
+            this.tabPage1.Controls.Add(this.attributesFile);
+            this.tabPage1.Controls.Add(this.attributesFileLabel);
+            this.tabPage1.Controls.Add(this.initialComment);
+            this.tabPage1.Controls.Add(this.initialCommentLabel);
+            this.tabPage1.Controls.Add(this.gitignoreFileButton);
+            this.tabPage1.Controls.Add(this.userName);
+            this.tabPage1.Controls.Add(this.userNameLabel);
+            this.tabPage1.Controls.Add(this.ignoreFile);
+            this.tabPage1.Controls.Add(this.ignoreFileLabel);
+            this.tabPage1.Controls.Add(this.userEmail);
+            this.tabPage1.Controls.Add(this.userEmailLabel);
             this.tabPage1.Controls.Add(this.forceAnnotatedCheckBox);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(537, 133);
+            this.tabPage1.Size = new System.Drawing.Size(597, 133);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "git";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // gitattributesFileButton
+            // 
+            this.gitattributesFileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.gitattributesFileButton.Image = ((System.Drawing.Image)(resources.GetObject("gitattributesFileButton.Image")));
+            this.gitattributesFileButton.Location = new System.Drawing.Point(568, 50);
+            this.gitattributesFileButton.Name = "gitattributesFileButton";
+            this.gitattributesFileButton.Size = new System.Drawing.Size(23, 23);
+            this.gitattributesFileButton.TabIndex = 6;
+            this.gitattributesFileButton.UseVisualStyleBackColor = true;
+            this.gitattributesFileButton.Click += new System.EventHandler(this.GitattributeFileButton_Click);
+            // 
+            // attributesFile
+            // 
+            this.attributesFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.attributesFile.Location = new System.Drawing.Point(78, 52);
+            this.attributesFile.Name = "attributesFile";
+            this.attributesFile.Size = new System.Drawing.Size(484, 20);
+            this.attributesFile.TabIndex = 5;
+            // 
+            // attributesFileLabel
+            // 
+            this.attributesFileLabel.AutoSize = true;
+            this.attributesFileLabel.Location = new System.Drawing.Point(6, 55);
+            this.attributesFileLabel.Name = "attributesFileLabel";
+            this.attributesFileLabel.Size = new System.Drawing.Size(67, 13);
+            this.attributesFileLabel.TabIndex = 4;
+            this.attributesFileLabel.Text = "Attributes file";
+            // 
+            // initialComment
+            // 
+            this.initialComment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.initialComment.Location = new System.Drawing.Point(78, 105);
+            this.initialComment.Name = "initialComment";
+            this.initialComment.Size = new System.Drawing.Size(513, 20);
+            this.initialComment.TabIndex = 12;
+            // 
+            // initialCommentLabel
+            // 
+            this.initialCommentLabel.AutoSize = true;
+            this.initialCommentLabel.Location = new System.Drawing.Point(6, 108);
+            this.initialCommentLabel.Name = "initialCommentLabel";
+            this.initialCommentLabel.Size = new System.Drawing.Size(51, 13);
+            this.initialCommentLabel.TabIndex = 11;
+            this.initialCommentLabel.Text = "Comment";
+            // 
+            // gitignoreFileButton
+            // 
+            this.gitignoreFileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.gitignoreFileButton.Image = ((System.Drawing.Image)(resources.GetObject("gitignoreFileButton.Image")));
+            this.gitignoreFileButton.Location = new System.Drawing.Point(568, 24);
+            this.gitignoreFileButton.Name = "gitignoreFileButton";
+            this.gitignoreFileButton.Size = new System.Drawing.Size(23, 23);
+            this.gitignoreFileButton.TabIndex = 3;
+            this.gitignoreFileButton.UseVisualStyleBackColor = true;
+            this.gitignoreFileButton.Click += new System.EventHandler(this.GitignoreFileButton_Click);
+            // 
+            // userName
+            // 
+            this.userName.Location = new System.Drawing.Point(78, 79);
+            this.userName.Name = "userName";
+            this.userName.Size = new System.Drawing.Size(208, 20);
+            this.userName.TabIndex = 8;
+            // 
+            // userNameLabel
+            // 
+            this.userNameLabel.AutoSize = true;
+            this.userNameLabel.Location = new System.Drawing.Point(6, 82);
+            this.userNameLabel.Name = "userNameLabel";
+            this.userNameLabel.Size = new System.Drawing.Size(58, 13);
+            this.userNameLabel.TabIndex = 7;
+            this.userNameLabel.Text = "User name";
+            // 
+            // ignoreFile
+            // 
+            this.ignoreFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ignoreFile.Location = new System.Drawing.Point(78, 26);
+            this.ignoreFile.Name = "ignoreFile";
+            this.ignoreFile.Size = new System.Drawing.Size(484, 20);
+            this.ignoreFile.TabIndex = 2;
+            // 
+            // ignoreFileLabel
+            // 
+            this.ignoreFileLabel.AutoSize = true;
+            this.ignoreFileLabel.Location = new System.Drawing.Point(6, 29);
+            this.ignoreFileLabel.Name = "ignoreFileLabel";
+            this.ignoreFileLabel.Size = new System.Drawing.Size(53, 13);
+            this.ignoreFileLabel.TabIndex = 1;
+            this.ignoreFileLabel.Text = "Ignore file";
+            // 
+            // userEmail
+            // 
+            this.userEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.userEmail.Location = new System.Drawing.Point(354, 79);
+            this.userEmail.Name = "userEmail";
+            this.userEmail.Size = new System.Drawing.Size(237, 20);
+            this.userEmail.TabIndex = 10;
+            // 
+            // userEmailLabel
+            // 
+            this.userEmailLabel.AutoSize = true;
+            this.userEmailLabel.Location = new System.Drawing.Point(292, 82);
+            this.userEmailLabel.Name = "userEmailLabel";
+            this.userEmailLabel.Size = new System.Drawing.Size(56, 13);
+            this.userEmailLabel.TabIndex = 9;
+            this.userEmailLabel.Text = "User email";
             // 
             // forceAnnotatedCheckBox
             // 
@@ -359,7 +511,7 @@
             this.forceAnnotatedCheckBox.Location = new System.Drawing.Point(6, 6);
             this.forceAnnotatedCheckBox.Name = "forceAnnotatedCheckBox";
             this.forceAnnotatedCheckBox.Size = new System.Drawing.Size(191, 17);
-            this.forceAnnotatedCheckBox.TabIndex = 7;
+            this.forceAnnotatedCheckBox.TabIndex = 0;
             this.forceAnnotatedCheckBox.Text = "Force use of annotated tag objects";
             this.forceAnnotatedCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -384,7 +536,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(537, 133);
+            this.tabPage2.Size = new System.Drawing.Size(597, 133);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "svn";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -524,11 +676,12 @@
             // 
             // outKindLabel
             // 
+            this.outKindLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.outKindLabel.AutoSize = true;
-            this.outKindLabel.Location = new System.Drawing.Point(6, 132);
+            this.outKindLabel.Location = new System.Drawing.Point(6, 152);
             this.outKindLabel.Name = "outKindLabel";
             this.outKindLabel.Size = new System.Drawing.Size(137, 13);
-            this.outKindLabel.TabIndex = 9;
+            this.outKindLabel.TabIndex = 11;
             this.outKindLabel.Text = "Output to the following VCS";
             // 
             // transcodeCheckBox
@@ -549,7 +702,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.domainTextBox.Location = new System.Drawing.Point(90, 45);
             this.domainTextBox.Name = "domainTextBox";
-            this.domainTextBox.Size = new System.Drawing.Size(464, 20);
+            this.domainTextBox.Size = new System.Drawing.Size(524, 20);
             this.domainTextBox.TabIndex = 4;
             // 
             // domainLabel
@@ -567,7 +720,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outDirTextBox.Location = new System.Drawing.Point(90, 19);
             this.outDirTextBox.Name = "outDirTextBox";
-            this.outDirTextBox.Size = new System.Drawing.Size(435, 20);
+            this.outDirTextBox.Size = new System.Drawing.Size(495, 20);
             this.outDirTextBox.TabIndex = 1;
             this.outDirTextBox.TextChanged += new System.EventHandler(this.outDirTextBox_TextChanged);
             // 
@@ -586,7 +739,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.logTextBox.Location = new System.Drawing.Point(90, 72);
             this.logTextBox.Name = "logTextBox";
-            this.logTextBox.Size = new System.Drawing.Size(464, 20);
+            this.logTextBox.Size = new System.Drawing.Size(524, 20);
             this.logTextBox.TabIndex = 6;
             // 
             // logLabel
@@ -600,9 +753,9 @@
             // 
             // cancelButton
             // 
-            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(497, 545);
+            this.cancelButton.Location = new System.Drawing.Point(557, 565);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 4;
@@ -612,15 +765,16 @@
             // 
             // changesetGroupBox
             // 
+            this.changesetGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.changesetGroupBox.Controls.Add(this.label4);
             this.changesetGroupBox.Controls.Add(this.label3);
             this.changesetGroupBox.Controls.Add(this.sameCommentUpDown);
             this.changesetGroupBox.Controls.Add(this.label2);
             this.changesetGroupBox.Controls.Add(this.label1);
             this.changesetGroupBox.Controls.Add(this.anyCommentUpDown);
-            this.changesetGroupBox.Location = new System.Drawing.Point(12, 464);
+            this.changesetGroupBox.Location = new System.Drawing.Point(12, 484);
             this.changesetGroupBox.Name = "changesetGroupBox";
-            this.changesetGroupBox.Size = new System.Drawing.Size(560, 75);
+            this.changesetGroupBox.Size = new System.Drawing.Size(406, 75);
             this.changesetGroupBox.TabIndex = 2;
             this.changesetGroupBox.TabStop = false;
             this.changesetGroupBox.Text = "Changeset Building";
@@ -709,7 +863,8 @@
             // 
             // saveSettingsButton
             // 
-            this.saveSettingsButton.Location = new System.Drawing.Point(12, 545);
+            this.saveSettingsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.saveSettingsButton.Location = new System.Drawing.Point(12, 565);
             this.saveSettingsButton.Name = "saveSettingsButton";
             this.saveSettingsButton.Size = new System.Drawing.Size(75, 23);
             this.saveSettingsButton.TabIndex = 6;
@@ -719,7 +874,8 @@
             // 
             // loadSettingsButton
             // 
-            this.loadSettingsButton.Location = new System.Drawing.Point(93, 545);
+            this.loadSettingsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.loadSettingsButton.Location = new System.Drawing.Point(93, 565);
             this.loadSettingsButton.Name = "loadSettingsButton";
             this.loadSettingsButton.Size = new System.Drawing.Size(75, 23);
             this.loadSettingsButton.TabIndex = 7;
@@ -729,7 +885,8 @@
             // 
             // emailMap
             // 
-            this.emailMap.Location = new System.Drawing.Point(191, 545);
+            this.emailMap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.emailMap.Location = new System.Drawing.Point(191, 565);
             this.emailMap.Name = "emailMap";
             this.emailMap.Size = new System.Drawing.Size(136, 23);
             this.emailMap.TabIndex = 8;
@@ -743,7 +900,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(584, 598);
+            this.ClientSize = new System.Drawing.Size(644, 618);
             this.Controls.Add(this.emailMap);
             this.Controls.Add(this.loadSettingsButton);
             this.Controls.Add(this.saveSettingsButton);
@@ -754,7 +911,8 @@
             this.Controls.Add(this.vssGroupBox);
             this.Controls.Add(this.statusStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(458, 419);
+            this.MaximumSize = new System.Drawing.Size(1600, 656);
+            this.MinimumSize = new System.Drawing.Size(600, 656);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "VSS2Git";
@@ -848,6 +1006,19 @@
         private System.Windows.Forms.Button loadSettingsButton;
         private System.Windows.Forms.Button emailMap;
         private System.Windows.Forms.CheckBox continueSyncCheckBox;
+        private System.Windows.Forms.Button gitignoreFileButton;
+        private System.Windows.Forms.TextBox userName;
+        private System.Windows.Forms.Label userNameLabel;
+        private System.Windows.Forms.TextBox ignoreFile;
+        private System.Windows.Forms.Label ignoreFileLabel;
+        private System.Windows.Forms.TextBox userEmail;
+        private System.Windows.Forms.Label userEmailLabel;
+        private System.Windows.Forms.TextBox initialComment;
+        private System.Windows.Forms.Label initialCommentLabel;
+        private System.Windows.Forms.Button gitattributesFileButton;
+        private System.Windows.Forms.TextBox attributesFile;
+        private System.Windows.Forms.Label attributesFileLabel;
+        private System.Windows.Forms.CheckBox tryGenerateCommitMessageCheckBox;
     }
 }
 

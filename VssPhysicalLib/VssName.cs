@@ -13,12 +13,15 @@
  * limitations under the License.
  */
 
+using System.Diagnostics;
+
 namespace Hpdi.VssPhysicalLib
 {
     /// <summary>
     /// Structure used to store a VSS project or file name.
     /// </summary>
     /// <author>Trevor Robinson</author>
+    [DebuggerDisplay("VssName: {ShortName} (is project: {IsProject})")]
     public struct VssName
     {
         private readonly short flags;

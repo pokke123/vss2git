@@ -25,6 +25,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Hpdi.VssLogicalLib;
 using System.Linq;
+using Elcom.Utils;
 
 namespace Hpdi.Vss2Git
 {
@@ -57,6 +58,13 @@ namespace Hpdi.Vss2Git
         {
             get { return resetRepo; }
             set { resetRepo = value; }
+        }
+
+        private bool tryGenerateCommitMessage = true;
+        public bool TryGenerateCommitMessage
+        {
+            get { return tryGenerateCommitMessage; }
+            set { tryGenerateCommitMessage = value; }
         }
 
         private Encoding commitEncoding = Encoding.UTF8;
@@ -131,6 +139,7 @@ namespace Hpdi.Vss2Git
                     }
                 }
 
+                bool makeInitialCommit = resetRepo;
                 if (!RetryCancel(delegate { vcsWrapper.Init(resetRepo); }))
                 {
                     return;
@@ -188,6 +197,7 @@ namespace Hpdi.Vss2Git
                         revisionNo++;
                     }
                     changeSetNo++;
+                    //AdvancedTaskbar.SetPosition((uint)changeSetNo);
                 }
 
                 // replay each changeset
@@ -219,8 +229,7 @@ namespace Hpdi.Vss2Git
                         continue;
                     }
 
-                    var changesetDesc = string.Format(CultureInfo.InvariantCulture,
-                        "changeset {0} from {1}", changesetId, changeset.DateTime);
+                    var changesetDesc = string.Format("changeset {0} from {1:yyyy-MM-dd HH:mm:ss}", changesetId, changeset.DateTime);
 
                     // replay each revision in changeset
                     logger.WriteSectionSeparator();
@@ -230,6 +239,11 @@ namespace Hpdi.Vss2Git
                     try
                     {
                         ReplayChangeset(pathMapper, changeset, labels);
+                        if (makeInitialCommit)
+                        {
+                            vcsWrapper.Init(changeset, repoPath);
+                            makeInitialCommit = false;
+                        }
                         vcsWrapper.NeedsCommit(); // to flush outstanding adds/deletes
                     }
                     finally
@@ -297,6 +311,7 @@ namespace Hpdi.Vss2Git
                             }
                         }
                     }
+                    AdvancedTaskbar.SetPosition((uint)changesetId);
                 }
 
                 stopwatch.Stop();
@@ -365,8 +380,8 @@ namespace Hpdi.Vss2Git
                 }
 
                 bool isAddAction = false;
-                bool writeProject = false;
                 bool writeFile = false;
+                string writeProjectPhysicalName = null;
                 VssItemInfo itemInfo = null;
                 switch (actionType)
                 {
@@ -403,12 +418,22 @@ namespace Hpdi.Vss2Git
                                 {
                                     if (Directory.Exists(targetPath))
                                     {
+                                        string successor = pathMapper.TryToGetPhysicalNameContainedInProject(project, target);
+                                        if (successor != null)
+                                        {
+                                            // we already have another project with the same logical name
+                                            logger.WriteLine("NOTE: {0} contains another directory named {1}; not deleting directory", 
+                                                projectDesc, target.LogicalName);
+                                            writeProjectPhysicalName = successor; // rewrite this project because it gets deleted below
+                                        }
+                                        
                                         if (((VssProjectInfo)itemInfo).ContainsFiles())
                                         {
                                             vcsWrapper.RemoveDir(targetPath, true);
                                         }
                                         else
                                         {
+                                            // git doesn't care about directories with no files
                                             vcsWrapper.RemoveEmptyDir(targetPath);
                                         }
                                     }
@@ -420,7 +445,7 @@ namespace Hpdi.Vss2Git
                                         // not sure how it can happen, but a project can evidently
                                         // contain another file with the same logical name, so check
                                         // that this is not the case before deleting the file
-                                        if (pathMapper.ProjectContainsLogicalName(project, target))
+                                        if (pathMapper.TryToGetPhysicalNameContainedInProject(project, target) != null)
                                         {
                                             logger.WriteLine("NOTE: {0} contains another file named {1}; not deleting file",
                                                 projectDesc, target.LogicalName);
@@ -503,6 +528,8 @@ namespace Hpdi.Vss2Git
                                 else
                                 {
                                     logger.WriteLine("***** warning: inside move with non existing source " + moveFromAction.OriginalProject);
+                                    // project was moved from a now-destroyed project
+                                    writeProjectPhysicalName = target.PhysicalName;
                                 }
                             }
                             else
@@ -615,7 +642,8 @@ namespace Hpdi.Vss2Git
                         }
                         else if (target.IsProject)
                         {
-                            writeProject = true;
+                            Directory.CreateDirectory(targetPath);
+                            writeProjectPhysicalName = target.PhysicalName;
                         }
                         else
                         {
@@ -623,11 +651,11 @@ namespace Hpdi.Vss2Git
                         }
                     }
 
-                    if (writeProject && pathMapper.IsProjectRooted(target.PhysicalName))
+                    if (writeProjectPhysicalName != null && pathMapper.IsProjectRooted(writeProjectPhysicalName))
                     {
                         Directory.CreateDirectory(targetPath);
                         // create all contained subdirectories
-                        foreach (var projectInfo in pathMapper.GetAllProjects(target.PhysicalName))
+                        foreach (var projectInfo in pathMapper.GetAllProjects(writeProjectPhysicalName))
                         {
                             logger.WriteLine("{0}: Creating subdirectory {1}",
                                 projectDesc, projectInfo.LogicalName);
@@ -636,10 +664,10 @@ namespace Hpdi.Vss2Git
 
                         vcsWrapper.AddDir(targetPath);
                         // write current rev of all contained files
-                        foreach (var fileInfo in pathMapper.GetAllFiles(target.PhysicalName))
+                        foreach (var fileInfo in pathMapper.GetAllFiles(writeProjectPhysicalName))
                         {
                             WriteRevision(pathMapper, actionType, fileInfo.PhysicalName,
-                                fileInfo.Version, target.PhysicalName);
+                                fileInfo.Version, writeProjectPhysicalName);
                         }
                     }
                     else if (writeFile)
@@ -790,9 +818,16 @@ namespace Hpdi.Vss2Git
             var result = false;
             AbortRetryIgnore(delegate
             {
+                string comment = changeset.Comment;
+                if (string.IsNullOrWhiteSpace(comment))
+                {
+                    if (this.tryGenerateCommitMessage)
+                        comment = (ChangesetCommentBuilder.GetComment(changeset) ?? DefaultComment);
+                    else
+                        comment = DefaultComment;
+                }
                 result = vcsWrapper.AddAll() &&
-                    vcsWrapper.Commit(GetUsername(changeset.User), GetEmail(changeset.User),
-                    changeset.Comment ?? DefaultComment, changeset.DateTime);
+                    vcsWrapper.Commit(GetUsername(changeset.User), GetEmail(changeset.User), comment, changeset.DateTime);
             });
             return result;
         }
@@ -820,21 +855,24 @@ namespace Hpdi.Vss2Git
                 catch (Exception e)
                 {
                     var message = LogException(e);
+                    AdvancedTaskbar.SetErrorState();
 
                     message += "\nSee log file for more information.";
-
                     var button = MessageBox.Show(message, "Error", buttons, MessageBoxIcon.Error);
                     switch (button)
                     {
                         case DialogResult.Retry:
                             retry = true;
+                            AdvancedTaskbar.SetUserResponseState(DialogResult.Retry);
                             break;
                         case DialogResult.Ignore:
                             retry = false;
+                            AdvancedTaskbar.SetUserResponseState(DialogResult.Ignore);
                             break;
                         default:
                             retry = false;
                             workQueue.Abort();
+                            AdvancedTaskbar.SetUserResponseState(DialogResult.Abort);
                             break;
                     }
                 }
