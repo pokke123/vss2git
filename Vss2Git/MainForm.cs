@@ -37,6 +37,10 @@ namespace Hpdi.Vss2Git
         public static readonly string vcsTypeGit = "git";
         public static readonly string vcsTypeSvn = "svn";
         public const string emailPropertiesFileName = "emails.properties";
+        private const string emailUserNamesListMessage = "The list of usernames is written to:\n\n{0}\n\n" +
+                        "Please edit it and fill in email addresses in the form:\n\n" +
+                        "username = Full Name <e-mail>\n\nor\n\nusername = e-mail";
+        private const string emailUserNamesListCaption = "User-email mapping";
 
         private readonly Dictionary<int, EncodingInfo> codePages = new Dictionary<int, EncodingInfo>();
         private readonly WorkQueue workQueue = new WorkQueue(1);
@@ -667,11 +671,11 @@ namespace Hpdi.Vss2Git
                 }
                 string propsPath = Path.Combine(db.BasePath, emailPropertiesFileName);
                 WriteDictionaryFile(emailDictionary, propsPath);
-                MessageBox.Show("The list of usernames is written to:\n\n"
-                    + propsPath + "\n\n"
-                    + "Please edit it and fill in email addresses in the form:\n\n"
-                    + "username = Full Name <e-mail>\n\nor\n\nusername = e-mail", "User-email mapping",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.BeginInvoke((MethodInvoker)delegate 
+                {
+                    MessageBox.Show(this, string.Format(emailUserNamesListMessage, propsPath),
+                        emailUserNamesListCaption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                });
             });
         }
 
