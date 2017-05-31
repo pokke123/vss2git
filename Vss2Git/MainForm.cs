@@ -154,6 +154,8 @@ namespace Hpdi.Vss2Git
                     encoding.EncodingName, encoding.CodePage, encoding.WebName);
                 logger.WriteLine("Comment transcoding: {0}",
                     transcodeCheckBox.Checked ? "enabled" : "disabled");
+                logger.WriteLine("Ignore VCS errors: {0}",
+                    ignoreVcsErrorsCheckBox.Checked ? "enabled" : "disabled");
 
                 var df = new VssDatabaseFactory(vssDirTextBox.Text);
                 df.Encoding = encoding;
@@ -213,6 +215,7 @@ namespace Hpdi.Vss2Git
                         vcsExporter.CommitEncoding = encoding;
                     }
                     vcsExporter.TryGenerateCommitMessage = tryGenerateCommitMessageCheckBox.Checked;
+                    vcsExporter.IgnoreVcsErrors = ignoreVcsErrorsCheckBox.Checked;
                     vcsExporter.ResetRepo = resetRepoCheckBox.Checked;
                     if (vcsExporter.ResetRepo)
                     {
@@ -489,6 +492,7 @@ namespace Hpdi.Vss2Git
             transcodeCheckBox.Checked = settings.TranscodeComments;
             resetRepoCheckBox.Checked = settings.ResetRepo || settings.ContinueSync;
             tryGenerateCommitMessageCheckBox.Checked = settings.TryGenerateCommitMessage;
+            ignoreVcsErrorsCheckBox.Checked = settings.IgnoreVcsErrors;
             forceAnnotatedCheckBox.Checked = settings.ForceAnnotatedTags;
             anyCommentUpDown.Value = settings.AnyCommentSeconds;
             sameCommentUpDown.Value = settings.SameCommentSeconds;
@@ -532,6 +536,7 @@ namespace Hpdi.Vss2Git
             settings.TranscodeComments = transcodeCheckBox.Checked;
             settings.ResetRepo = resetRepoCheckBox.Checked;
             settings.TryGenerateCommitMessage = tryGenerateCommitMessageCheckBox.Checked;
+            settings.IgnoreVcsErrors = ignoreVcsErrorsCheckBox.Checked;
             settings.ContinueSync = continueSyncCheckBox.Checked;
             settings.ForceAnnotatedTags = forceAnnotatedCheckBox.Checked;
             settings.AnyCommentSeconds = (int)anyCommentUpDown.Value;

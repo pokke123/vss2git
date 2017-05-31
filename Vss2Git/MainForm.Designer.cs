@@ -49,6 +49,7 @@
             this.changeLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.timeLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.outputGroupBox = new System.Windows.Forms.GroupBox();
+            this.ignoreVcsErrorsCheckBox = new System.Windows.Forms.CheckBox();
             this.tryGenerateCommitMessageCheckBox = new System.Windows.Forms.CheckBox();
             this.continueSyncCheckBox = new System.Windows.Forms.CheckBox();
             this.outDirButton = new System.Windows.Forms.Button();
@@ -294,6 +295,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outputGroupBox.Controls.Add(this.tryGenerateCommitMessageCheckBox);
             this.outputGroupBox.Controls.Add(this.continueSyncCheckBox);
+            this.outputGroupBox.Controls.Add(this.ignoreVcsErrorsCheckBox);
             this.outputGroupBox.Controls.Add(this.outDirButton);
             this.outputGroupBox.Controls.Add(this.resetRepoCheckBox);
             this.outputGroupBox.Controls.Add(this.vcsSetttingsTabs);
@@ -313,6 +315,17 @@
             this.outputGroupBox.TabIndex = 1;
             this.outputGroupBox.TabStop = false;
             this.outputGroupBox.Text = "Output Settings";
+            // 
+            // ignoreVcsErrorsCheckBox
+            // 
+            this.ignoreVcsErrorsCheckBox.AutoSize = true;
+            this.ignoreVcsErrorsCheckBox.Location = new System.Drawing.Point(306, 169);
+            this.ignoreVcsErrorsCheckBox.Name = "ignoreVcsErrorsCheckBox";
+            this.ignoreVcsErrorsCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.ignoreVcsErrorsCheckBox.Size = new System.Drawing.Size(109, 17);
+            this.ignoreVcsErrorsCheckBox.TabIndex = 13;
+            this.ignoreVcsErrorsCheckBox.Text = "Ignore VCS errors";
+            this.ignoreVcsErrorsCheckBox.UseVisualStyleBackColor = true;
             // 
             // tryGenerateCommitMessageCheckBox
             // 
@@ -371,7 +384,7 @@
             this.vcsSetttingsTabs.Name = "vcsSetttingsTabs";
             this.vcsSetttingsTabs.SelectedIndex = 0;
             this.vcsSetttingsTabs.Size = new System.Drawing.Size(605, 159);
-            this.vcsSetttingsTabs.TabIndex = 14;
+            this.vcsSetttingsTabs.TabIndex = 15;
             this.vcsSetttingsTabs.SelectedIndexChanged += new System.EventHandler(this.vcsSetttingsTabs_SelectedIndexChanged);
             // 
             // tabPage1
@@ -685,7 +698,7 @@
             this.outKindLabel.Location = new System.Drawing.Point(6, 178);
             this.outKindLabel.Name = "outKindLabel";
             this.outKindLabel.Size = new System.Drawing.Size(137, 13);
-            this.outKindLabel.TabIndex = 13;
+            this.outKindLabel.TabIndex = 14;
             this.outKindLabel.Text = "Output to the following VCS";
             // 
             // transcodeCheckBox
@@ -996,6 +1009,7 @@
         private System.Windows.Forms.ComboBox encodingComboBox;
         private System.Windows.Forms.CheckBox transcodeCheckBox;
         private System.Windows.Forms.CheckBox forceAnnotatedCheckBox;
+        private System.Windows.Forms.CheckBox ignoreVcsErrorsCheckBox;
         private System.Windows.Forms.Label outKindLabel;
         private System.Windows.Forms.TextBox svnPasswordTextBox;
         private System.Windows.Forms.TextBox svnUserTextBox;

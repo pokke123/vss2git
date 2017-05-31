@@ -265,6 +265,18 @@ namespace Hpdi.Vss2Git.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IgnoreVcsErrors {
+            get {
+                return ((bool)(this["IgnoreVcsErrors"]));
+            }
+            set {
+                this["IgnoreVcsErrors"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string SvnProjectPath {
             get {

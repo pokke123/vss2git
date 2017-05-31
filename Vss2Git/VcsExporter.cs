@@ -44,6 +44,7 @@ namespace Hpdi.Vss2Git
         private readonly StreamCopier streamCopier = new StreamCopier();
         private readonly HashSet<string> tagsUsed = new HashSet<string>();
         private string defaultComment = "";
+        private bool ignoreVcsErrors = false;
 
         private string emailDomain = "";
         public string EmailDomain
@@ -79,6 +80,12 @@ namespace Hpdi.Vss2Git
         {
             get { return defaultComment; }
             set { defaultComment = value; }
+        }
+
+        public bool IgnoreVcsErrors
+        {
+            get { return ignoreVcsErrors; }
+            set { ignoreVcsErrors = value; }
         }
 
         public VcsExporter(WorkQueue workQueue, Logger logger,
@@ -863,6 +870,12 @@ namespace Hpdi.Vss2Git
                     AdvancedTaskbar.SetErrorState();
 
                     message += "\nSee log file for more information.";
+                    if (ignoreVcsErrors)
+                    {
+                        retry = false;
+                        continue;
+                    }
+
                     var button = MessageBox.Show(message, "Error", buttons, MessageBoxIcon.Error);
                     switch (button)
                     {
