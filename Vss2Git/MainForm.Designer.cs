@@ -200,6 +200,7 @@
             this.vssProjectTextBox.Name = "vssProjectTextBox";
             this.vssProjectTextBox.Size = new System.Drawing.Size(524, 20);
             this.vssProjectTextBox.TabIndex = 4;
+            this.vssProjectTextBox.TextChanged += new System.EventHandler(this.SourceProjectChanged);
             // 
             // vssDirTextBox
             // 
@@ -209,6 +210,7 @@
             this.vssDirTextBox.Name = "vssDirTextBox";
             this.vssDirTextBox.Size = new System.Drawing.Size(495, 20);
             this.vssDirTextBox.TabIndex = 1;
+            this.vssDirTextBox.TextChanged += new System.EventHandler(this.SourceProjectChanged);
             // 
             // vssProjectLabel
             // 

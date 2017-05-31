@@ -443,6 +443,7 @@ namespace Hpdi.Vss2Git
         {
             try
             {
+                this.ignoreVcsErrorsCheckBox.Checked = false;
                 var settings = Properties.Settings.Default;
                 string lastSettingsFile = settings.LastSettingsFile;
                 if (!string.IsNullOrEmpty(lastSettingsFile))
@@ -492,7 +493,6 @@ namespace Hpdi.Vss2Git
             transcodeCheckBox.Checked = settings.TranscodeComments;
             resetRepoCheckBox.Checked = settings.ResetRepo || settings.ContinueSync;
             tryGenerateCommitMessageCheckBox.Checked = settings.TryGenerateCommitMessage;
-            ignoreVcsErrorsCheckBox.Checked = settings.IgnoreVcsErrors;
             forceAnnotatedCheckBox.Checked = settings.ForceAnnotatedTags;
             anyCommentUpDown.Value = settings.AnyCommentSeconds;
             sameCommentUpDown.Value = settings.SameCommentSeconds;
@@ -536,7 +536,6 @@ namespace Hpdi.Vss2Git
             settings.TranscodeComments = transcodeCheckBox.Checked;
             settings.ResetRepo = resetRepoCheckBox.Checked;
             settings.TryGenerateCommitMessage = tryGenerateCommitMessageCheckBox.Checked;
-            settings.IgnoreVcsErrors = ignoreVcsErrorsCheckBox.Checked;
             settings.ContinueSync = continueSyncCheckBox.Checked;
             settings.ForceAnnotatedTags = forceAnnotatedCheckBox.Checked;
             settings.AnyCommentSeconds = (int)anyCommentUpDown.Value;
@@ -792,6 +791,11 @@ namespace Hpdi.Vss2Git
                     MessageBox.Show(ex.Message, "VSS2Git", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void SourceProjectChanged(object sender, EventArgs e)
+        {
+            this.ignoreVcsErrorsCheckBox.Checked = false;
         }
     }
 }
