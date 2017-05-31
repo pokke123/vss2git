@@ -204,6 +204,10 @@ namespace Hpdi.Vss2Git
                     {
                         vcsExporter.EmailDomain = domainTextBox.Text;
                     }
+                    if (!string.IsNullOrEmpty(commentTextBox.Text))
+                    {
+                        vcsExporter.DefaultComment = commentTextBox.Text;
+                    }
                     if (!transcodeCheckBox.Checked)
                     {
                         vcsExporter.CommitEncoding = encoding;
@@ -478,6 +482,7 @@ namespace Hpdi.Vss2Git
             excludeTextBox.Text = settings.VssExcludePaths;
             outDirTextBox.Text = settings.OutDirectory;
             domainTextBox.Text = settings.DefaultEmailDomain;
+            commentTextBox.Text = settings.DefaultComment;
             logTextBox.Text = settings.LogFile;
             transcodeCheckBox.Checked = settings.TranscodeComments;
             resetRepoCheckBox.Checked = settings.ResetRepo || settings.ContinueSync;
@@ -520,6 +525,7 @@ namespace Hpdi.Vss2Git
             settings.VssExcludePaths = excludeTextBox.Text;
             settings.OutDirectory = outDirTextBox.Text;
             settings.DefaultEmailDomain = domainTextBox.Text;
+            settings.DefaultComment = commentTextBox.Text;
             settings.LogFile = logTextBox.Text;
             settings.TranscodeComments = transcodeCheckBox.Checked;
             settings.ResetRepo = resetRepoCheckBox.Checked;

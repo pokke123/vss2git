@@ -35,8 +35,6 @@ namespace Hpdi.Vss2Git
     /// <author>Trevor Robinson</author>
     class VcsExporter : Worker
     {
-        private const string DefaultComment = "";
-
         private readonly VssDatabase database;
         private readonly RevisionAnalyzer revisionAnalyzer;
         private readonly ChangesetBuilder changesetBuilder;
@@ -45,6 +43,7 @@ namespace Hpdi.Vss2Git
         private readonly IDictionary<string, string> emailDictionary;
         private readonly StreamCopier streamCopier = new StreamCopier();
         private readonly HashSet<string> tagsUsed = new HashSet<string>();
+        private string defaultComment = "";
 
         private string emailDomain = "";
         public string EmailDomain
@@ -74,6 +73,12 @@ namespace Hpdi.Vss2Git
         {
             get { return commitEncoding; }
             set { commitEncoding = value; }
+        }
+
+        public string DefaultComment
+        {
+            get { return defaultComment; }
+            set { defaultComment = value; }
         }
 
         public VcsExporter(WorkQueue workQueue, Logger logger,
