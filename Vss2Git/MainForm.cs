@@ -235,6 +235,7 @@ namespace Hpdi.Vss2Git
                 };
 
                 statusTimer.Enabled = true;
+                emailMap.Enabled = false;
                 goButton.Enabled = false;
                 cancelButton.Text = "Cancel";
             }
@@ -312,6 +313,7 @@ namespace Hpdi.Vss2Git
                 {
                     LoadRepoSettings();
                 }
+                emailMap.Enabled = true;
                 goButton.Enabled = true;
                 AdvancedTaskbar.Disable();
                 cancelButton.Text = "Close";
@@ -640,6 +642,11 @@ namespace Hpdi.Vss2Git
             }
             var emailDictionary = ReadDictionaryFile("e-mail dictionary", db.BasePath, emailPropertiesFileName);
 
+            AdvancedTaskbar.EnableItermediate();
+            this.statusTimer.Enabled = true;
+            this.emailMap.Enabled = false;
+            this.goButton.Enabled = false;
+            this.cancelButton.Text = "Cancel";
             revisionAnalyzer = new RevisionAnalyzer(workQueue, logger, db);
             if (!string.IsNullOrEmpty(excludeTextBox.Text))
             {
