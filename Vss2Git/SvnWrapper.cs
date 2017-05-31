@@ -14,8 +14,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.IO;
@@ -25,16 +23,16 @@ namespace Hpdi.Vss2Git
 {
     class SvnWrapper : AbstractVcsWrapper
     {
-        public static readonly string svnMetaDir = ".svn";
-        public static readonly string stdTrunk = "trunk";
-        public static readonly string stdTags = "tags";
-        public static readonly string stdBranches = "branches";
-        public static readonly string svnExecutable = "svn";
-        public static readonly string svnAdmin = "svnadmin";
-        public static readonly string protocolFile = "file:";
-        public static readonly string protocolSvn = "svn:";
-        public static readonly string protocolHttp = "http:";
-        public static readonly string protocolHttps = "https:";
+        private const string svnMetaDir = ".svn";
+        public const string stdTrunk = "trunk";
+        public const string stdTags = "tags";
+        public const string stdBranches = "branches";
+        private const string svnExecutable = "svn";
+        private const string svnAdmin = "svnadmin";
+        private const string protocolFile = "file:";
+        private const string protocolSvn = "svn:";
+        private const string protocolHttp = "http:";
+        private const string protocolHttps = "https:";
 
         private string repoUrl;
         private string projectPath;

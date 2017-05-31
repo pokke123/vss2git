@@ -15,8 +15,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -30,14 +28,14 @@ namespace Hpdi.Vss2Git
     /// <author>Trevor Robinson</author>
     class GitWrapper : AbstractVcsWrapper
     {
-        public static readonly string gitMetaDir = ".git";
-        public static readonly string gitExecutable = "git";
-        public const string gitIgnoreFile = ".gitignore";
-        public const string gitAttributesFile = ".gitattributes";
+        private const string gitMetaDir = ".git";
+        private const string gitExecutable = "git";
+        private const string gitIgnoreFile = ".gitignore";
+        private const string gitAttributesFile = ".gitattributes";
 
-        private List<String> addQueue = new List<string>();
-        private List<String> deleteQueue = new List<string>();
-        private List<String> dirDeleteQueue = new List<string>();
+        private List<string> addQueue = new List<string>();
+        private List<string> deleteQueue = new List<string>();
+        private List<string> dirDeleteQueue = new List<string>();
 
         private Encoding commitEncoding = Encoding.UTF8;
         private string gitIgnoreInfo;

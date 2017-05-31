@@ -34,9 +34,9 @@ namespace Hpdi.Vss2Git
     /// <author>Trevor Robinson</author>
     public partial class MainForm : Form
     {
-        public static readonly string vcsTypeGit = "git";
-        public static readonly string vcsTypeSvn = "svn";
-        public const string emailPropertiesFileName = "emails.properties";
+        private const string vcsTypeGit = "git";
+        private const string vcsTypeSvn = "svn";
+        private const string emailPropertiesFileName = "emails.properties";
         private const string emailUserNamesListMessage = "The list of usernames is written to:\n\n{0}\n\n" +
                         "Please edit it and fill in email addresses in the form:\n\n" +
                         "username = Full Name <e-mail>\n\nor\n\nusername = e-mail";
