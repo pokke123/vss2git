@@ -98,6 +98,8 @@ namespace Hpdi.Vss2Git
 
         public void ExportToVcs(string repoPath, DateTime? continueAfter)
         {
+            if (resetRepo)
+                continueAfter = null;
             this.continueAfter = continueAfter;
             workQueue.AddLast(delegate(object work)
             {
@@ -106,8 +108,6 @@ namespace Hpdi.Vss2Git
                 logger.WriteSectionSeparator();
                 LogStatus(work, "Initializing repository");
 
-                if (continueAfter != null && resetRepo)
-                    throw new ProcessException("Unable to continue sync and reset repo at the same time!", null, null);
                 // create repository directory if it does not exist
                 if (!Directory.Exists(repoPath))
                 {
