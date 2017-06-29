@@ -32,6 +32,8 @@ namespace Hpdi.Vss2Git
     /// <author>Trevor Robinson</author>
     static class VssUtil
     {
+        public static Logger logger = Logger.Null;
+
         public static RecursionStatus RecurseItems(
             VssProject project, VssProjectCallback projectCallback, VssFileCallback fileCallback)
         {
@@ -43,22 +45,38 @@ namespace Hpdi.Vss2Git
                     return status;
                 }
             }
-            foreach (VssProject subproject in project.Projects)
+            bool logged = false;
+            try
             {
-                RecursionStatus status = RecurseItems(
-                    subproject, projectCallback, fileCallback);
-                if (status == RecursionStatus.Abort)
+                foreach (VssProject subproject in project.Projects)
                 {
-                    return status;
+                    RecursionStatus status = RecurseItems(
+                        subproject, projectCallback, fileCallback);
+                    if (status == RecursionStatus.Abort)
+                    {
+                        return status;
+                    }
+                }
+            } catch (System.IO.IOException e)
+            {
+                logger.WriteLine("Warning: {0}", e);
+                logged = true;
+            }
+            try
+            {
+                foreach (VssFile file in project.Files)
+                {
+                    RecursionStatus status = fileCallback(project, file);
+                    if (status == RecursionStatus.Abort)
+                    {
+                        return status;
+                    }
                 }
             }
-            foreach (VssFile file in project.Files)
+            catch (System.IO.IOException e)
             {
-                RecursionStatus status = fileCallback(project, file);
-                if (status == RecursionStatus.Abort)
-                {
-                    return status;
-                }
+                if (!logged)
+                    logger.WriteLine("Warning: {0}", e);
             }
             return RecursionStatus.Continue;
         }
