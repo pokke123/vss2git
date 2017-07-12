@@ -133,15 +133,17 @@ namespace Hpdi.Vss2Git
                             }
                             else if (hasDelete && actionType == VssActionType.Rename)
                             {
-                                var renameAction = revision.Action as VssRenameAction;
-                                if (renameAction != null && renameAction.Name.IsProject)
-                                {
-                                    // split the change set if a rename of a directory follows a delete
-                                    // otherwise a git error occurs
-                                    logger.WriteLine("NOTE: Splitting changeset due to rename after delete in {0}:",
-                                        targetFile);
-                                    flush = true;
-                                }
+                                // don't mix deletes with renames
+                                logger.WriteLine("NOTE: Splitting changeset due to rename after delete in {0}:",
+                                    targetFile);
+                                flush = true;
+                            }
+                            else if (hasDelete && actionType == VssActionType.Add)
+                            {
+                                // don't mix deletes with adds
+                                logger.WriteLine("NOTE: Splitting changeset due to an add after delete in {0}:",
+                                    targetFile);
+                                flush = true;
                             }
 
                             if (flush)
