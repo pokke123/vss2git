@@ -205,7 +205,7 @@ namespace Hpdi.Vss2Git
                 throw new InvalidOperationException("Have modified, missing, untracked or conflicting files");
 #endif
 
-            var person = new PersonIdent(authorName, authorEmail, localTime, TimeZoneInfo.Local);
+            var person = new PersonIdent(authorName, authorEmail, localTime.ToUniversalTime(), TimeZoneInfo.Utc);
 
             git.Commit()
                 .SetMessage(comment)
@@ -220,7 +220,7 @@ namespace Hpdi.Vss2Git
         {
             git.Tag()
                 .SetMessage(comment)
-                .SetTagger(new PersonIdent(taggerName, taggerEmail, localTime, TimeZoneInfo.Local))
+                .SetTagger(new PersonIdent(taggerName, taggerEmail, localTime.ToUniversalTime(), TimeZoneInfo.Utc))
                 .SetName(name)
                 .Call();
         }
