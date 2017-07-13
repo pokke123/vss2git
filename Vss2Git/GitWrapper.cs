@@ -87,6 +87,10 @@ namespace Hpdi.Vss2Git
                 SetConfig("i18n.commitencoding", commitEncoding.WebName);
             }
             CheckOutputDirectory(newRepo);
+            if (!newRepo && git == null)
+            {
+                git = Git.Open(GetOutputDirectory());
+            }
         }
 
         public override bool Add(string path)
