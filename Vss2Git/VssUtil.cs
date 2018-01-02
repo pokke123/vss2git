@@ -34,6 +34,8 @@ namespace Hpdi.Vss2Git
     /// <author>Trevor Robinson</author>
     static class VssUtil
     {
+        public static Logger logger = Logger.Null;
+
         public static RecursionStatus RecurseItems(
             VssProject project, VssProjectCallback projectCallback, VssFileCallback fileCallback)
         {
@@ -45,46 +47,74 @@ namespace Hpdi.Vss2Git
                     return status;
                 }
             }
-            foreach (VssProject subproject in project.Projects)
+            bool logged = false;
+            try
             {
-                RecursionStatus status = RecurseItems(
-                    subproject, projectCallback, fileCallback);
-                if (status == RecursionStatus.Abort)
+                foreach (VssProject subproject in project.Projects)
                 {
-                    return status;
+                    RecursionStatus status = RecurseItems(
+                        subproject, projectCallback, fileCallback);
+                    if (status == RecursionStatus.Abort)
+                    {
+                        return status;
+                    }
                 }
+            }
+            catch (IOException e)
+            {
+                logger.WriteLine("Warning: {0}", e);
+                logged = true;
             }
 
             HashSet<string> locallyProcessedFiles = new HashSet<string>();
-            foreach (VssFile file in project.Files)
+            try
             {
-                RecursionStatus status = fileCallback(project, file);
-                locallyProcessedFiles.Add(file.PhysicalName);
-                if (status == RecursionStatus.Abort)
+                foreach (VssFile file in project.Files)
                 {
-                    return status;
+                    RecursionStatus status = fileCallback(project, file);
+                    locallyProcessedFiles.Add(file.PhysicalName);
+                    if (status == RecursionStatus.Abort)
+                    {
+                        return status;
+                    }
                 }
             }
-            foreach (VssRevision revision in project.Revisions)
+            catch (IOException e)
             {
-                var namedAction = revision.Action as VssNamedAction;
-                if (namedAction != null && !namedAction.Name.IsProject)
+                if (!logged)
                 {
-                    string physicalName = namedAction.Name.PhysicalName;
-                    if (!locallyProcessedFiles.Contains(physicalName))
+                    logger.WriteLine("Warning: {0}", e);
+                    logged = true;
+                }
+            }
+            try
+            {
+                foreach (VssRevision revision in project.Revisions)
+                {
+                    var namedAction = revision.Action as VssNamedAction;
+                    if (namedAction != null && !namedAction.Name.IsProject)
                     {
-                        VssFile file = project.GetHistoricalFile(physicalName, namedAction.Name.LogicalName);
-                        locallyProcessedFiles.Add(file.PhysicalName);
-                        if (File.Exists(file.PhysicalPath) && File.Exists(file.DataPath))
+                        string physicalName = namedAction.Name.PhysicalName;
+                        if (!locallyProcessedFiles.Contains(physicalName))
                         {
-                            RecursionStatus status = fileCallback(project, file);
-                            if (status == RecursionStatus.Abort)
+                            VssFile file = project.GetHistoricalFile(physicalName, namedAction.Name.LogicalName);
+                            locallyProcessedFiles.Add(file.PhysicalName);
+                            if (File.Exists(file.PhysicalPath) && File.Exists(file.DataPath))
                             {
-                                return status;
+                                RecursionStatus status = fileCallback(project, file);
+                                if (status == RecursionStatus.Abort)
+                                {
+                                    return status;
+                                }
                             }
                         }
                     }
                 }
+            }
+            catch (IOException e)
+            {
+                if (!logged)
+                    logger.WriteLine("Warning: {0}", e);
             }
             return RecursionStatus.Continue;
         }
