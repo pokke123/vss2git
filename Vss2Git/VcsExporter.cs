@@ -14,18 +14,16 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
-using Hpdi.VssLogicalLib;
-using System.Linq;
 using Elcom.Utils;
+using Hpdi.VssLogicalLib;
 
 namespace Hpdi.Vss2Git
 {
@@ -88,6 +86,13 @@ namespace Hpdi.Vss2Git
             set { ignoreVcsErrors = value; }
         }
 
+        private string removePath = "";
+        public string RemovePath
+        {
+            get { return removePath; }
+            set { removePath = value; }
+        }
+
         public VcsExporter(WorkQueue workQueue, Logger logger,
             RevisionAnalyzer revisionAnalyzer, ChangesetBuilder changesetBuilder,
             IVcsWrapper vcsWrapper, IDictionary<string, string> usersmap)
@@ -121,7 +126,7 @@ namespace Hpdi.Vss2Git
             if (resetRepo)
                 continueAfter = null;
             this.continueAfter = continueAfter;
-            workQueue.AddLast(delegate(object work)
+            workQueue.AddLast(delegate (object work)
             {
                 var stopwatch = Stopwatch.StartNew();
 
@@ -152,7 +157,8 @@ namespace Hpdi.Vss2Git
                 }
 
                 bool makeInitialCommit = resetRepo;
-                if (!RetryCancel(delegate { vcsWrapper.Init(resetRepo); }))
+                if (!RetryCancel(delegate
+                { vcsWrapper.Init(resetRepo); }))
                 {
                     return;
                 }
@@ -168,7 +174,36 @@ namespace Hpdi.Vss2Git
                 foreach (var rootProject in revisionAnalyzer.RootProjects)
                 {
                     // root must be repo path here - the path mapper uses paths relative to this one
+                    VssPathMapper vssPathMapper = new VssPathMapper();
+                    string test = vssPathMapper.GetWorkingPath(repoPath, rootProject.Path);
                     var rootPath = repoPath;
+                    if (RemovePath != "")
+                    {
+                        if (rootProject.Path.StartsWith(RemovePath))
+                        {
+                            string path = rootProject.Path.Replace(RemovePath, "");
+                            path = path.Replace("/", "\\");
+                            if (path.StartsWith("\\"))
+                            {
+
+                                rootPath = rootPath + path;
+                            } else
+                            {
+                                rootPath = rootPath + "\\" + path;
+                            }
+                        } else
+                        {
+                            var button = MessageBox.Show($"{RemovePath} not found in path, Do you wanne continue with all contint in the root folder.",
+                            "Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                            if (button == DialogResult.Cancel)
+                            {
+                                workQueue.Abort();
+                                return;
+                            }
+                        }
+                    }
+
+
                     pathMapper.SetProjectPath(rootProject.PhysicalName, rootPath, rootProject.Path);
                 }
 
@@ -287,12 +322,10 @@ namespace Hpdi.Vss2Git
                             if (string.IsNullOrEmpty(labelName))
                             {
                                 logger.WriteLine("NOTE: Ignoring empty label");
-                            }
-                            else if (commitCount == 0)
+                            } else if (commitCount == 0)
                             {
                                 logger.WriteLine("NOTE: Ignoring label '{0}' before initial commit", labelName);
-                            }
-                            else
+                            } else
                             {
                                 var tagName = GetTagFromLabel(labelName);
 
@@ -434,23 +467,21 @@ namespace Hpdi.Vss2Git
                                         if (successor != null)
                                         {
                                             // we already have another project with the same logical name
-                                            logger.WriteLine("NOTE: {0} contains another directory named {1}; not deleting directory", 
+                                            logger.WriteLine("NOTE: {0} contains another directory named {1}; not deleting directory",
                                                 projectDesc, target.LogicalName);
                                             writeProjectPhysicalName = successor; // rewrite this project because it gets deleted below
                                         }
-                                        
+
                                         if (((VssProjectInfo)itemInfo).ContainsFiles())
                                         {
                                             vcsWrapper.RemoveDir(targetPath, true);
-                                        }
-                                        else
+                                        } else
                                         {
                                             // git doesn't care about directories with no files
                                             vcsWrapper.RemoveEmptyDir(targetPath);
                                         }
                                     }
-                                }
-                                else
+                                } else
                                 {
                                     if (File.Exists(targetPath))
                                     {
@@ -461,8 +492,7 @@ namespace Hpdi.Vss2Git
                                         {
                                             logger.WriteLine("NOTE: {0} contains another file named {1}; not deleting file",
                                                 projectDesc, target.LogicalName);
-                                        }
-                                        else
+                                        } else
                                         {
                                             vcsWrapper.RemoveFile(targetPath);
                                         }
@@ -488,13 +518,11 @@ namespace Hpdi.Vss2Git
                                     if (projectInfo == null || projectInfo.ContainsFiles())
                                     {
                                         CaseSensitiveRename(sourcePath, targetPath, vcsWrapper.Move);
-                                    }
-                                    else
+                                    } else
                                     {
                                         CaseSensitiveRename(sourcePath, targetPath, vcsWrapper.MoveEmptyDir);
                                     }
-                                }
-                                else
+                                } else
                                 {
                                     logger.WriteLine("NOTE: Skipping rename because {0} does not exist", sourcePath);
                                 }
@@ -531,20 +559,17 @@ namespace Hpdi.Vss2Git
                                     if (((VssProjectInfo)itemInfo).ContainsFiles())
                                     {
                                         vcsWrapper.Move(sourcePath, targetPath);
-                                    }
-                                    else
+                                    } else
                                     {
                                         vcsWrapper.MoveEmptyDir(sourcePath, targetPath);
                                     }
-                                }
-                                else
+                                } else
                                 {
                                     logger.WriteLine("***** warning: inside move with non existing source " + moveFromAction.OriginalProject);
                                     // project was moved from a now-destroyed project
                                     writeProjectPhysicalName = target.PhysicalName;
                                 }
-                            }
-                            else
+                            } else
                             {
                                 // MoveFrom -> outside scope: recover
                                 logger.WriteLine("start MoveFrom -> outside " + moveFromAction.OriginalProject + " (recover)");
@@ -566,8 +591,7 @@ namespace Hpdi.Vss2Git
                             {
                                 // MoveTo -> inside scope: do nothing - paired with corresponding MoveFrom that handles actual move
                                 logger.WriteLine("start MoveTo -> inside " + moveToAction.NewProject + " (do nothing)");
-                            }
-                            else
+                            } else
                             {
                                 // MoveTo -> outside scope: delete - no matching MoveFrom available
                                 logger.WriteLine("start MoveTo -> outside " + moveToAction.NewProject + " (delete)");
@@ -580,8 +604,7 @@ namespace Hpdi.Vss2Git
                                     if (((VssProjectInfo)itemInfo).ContainsFiles())
                                     {
                                         vcsWrapper.RemoveDir(targetPath, true);
-                                    }
-                                    else
+                                    } else
                                     {
                                         vcsWrapper.RemoveEmptyDir(targetPath);
                                     }
@@ -602,8 +625,7 @@ namespace Hpdi.Vss2Git
                             {
                                 logger.WriteLine("{0}: Pin {1}", projectDesc, target.LogicalName);
                                 itemInfo = pathMapper.PinItem(project, target);
-                            }
-                            else
+                            } else
                             {
                                 logger.WriteLine("{0}: Unpin {1}", projectDesc, target.LogicalName);
                                 itemInfo = pathMapper.UnpinItem(project, target);
@@ -651,13 +673,11 @@ namespace Hpdi.Vss2Git
                         {
                             logger.WriteLine("NOTE: Skipping destroyed file: {0}", targetPath);
                             itemInfo.Destroyed = true;
-                        }
-                        else if (target.IsProject)
+                        } else if (target.IsProject)
                         {
                             Directory.CreateDirectory(targetPath);
                             writeProjectPhysicalName = target.PhysicalName;
-                        }
-                        else
+                        } else
                         {
                             writeFile = true;
                         }
@@ -681,8 +701,7 @@ namespace Hpdi.Vss2Git
                             WriteRevision(pathMapper, actionType, fileInfo.PhysicalName,
                                 fileInfo.Version, writeProjectPhysicalName);
                         }
-                    }
-                    else if (writeFile)
+                    } else if (writeFile)
                     {
                         // write current rev to working path
                         int version = pathMapper.GetFileVersion(target.PhysicalName);
@@ -773,8 +792,7 @@ namespace Hpdi.Vss2Git
                             if (isInside)
                             {
                                 pathMapper.MoveProjectFrom(project, target, moveFromAction.OriginalProject);
-                            }
-                            else
+                            } else
                             {
                                 pathMapper.RecoverItem(project, target);
                             }
@@ -798,8 +816,7 @@ namespace Hpdi.Vss2Git
                             if (pinAction.Pinned)
                             {
                                 pathMapper.PinItem(project, target);
-                            }
-                            else
+                            } else
                             {
                                 pathMapper.UnpinItem(project, target);
                             }
@@ -1043,8 +1060,7 @@ namespace Hpdi.Vss2Git
                     CaseSensitiveRename(sourcePath, tempPath, renamer);
                     CaseSensitiveRename(tempPath, destPath, renamer);
                 }
-            }
-            else
+            } else
             {
                 renamer(sourcePath, destPath);
             }

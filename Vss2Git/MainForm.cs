@@ -15,16 +15,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using Hpdi.VssLogicalLib;
-using System.IO;
-using System.Configuration;
-using System.Globalization;
-using System.Threading;
-using Mono.Options;
 using Elcom.Utils;
+using Hpdi.VssLogicalLib;
+using Mono.Options;
 
 namespace Hpdi.Vss2Git
 {
@@ -123,8 +121,7 @@ namespace Hpdi.Vss2Git
                             if (continueSyncCheckBox.Checked)
                                 resetRepoCheckBox.Checked = true;
                             continueSyncCheckBox.Enabled = continueSyncCheckBox.Checked = false;
-                        }
-                        else
+                        } else
                         {
                             resetRepoCheckBox.Checked = false;
                             continueSyncCheckBox.Enabled = true;
@@ -161,31 +158,17 @@ namespace Hpdi.Vss2Git
                     transcodeCheckBox.Checked ? "enabled" : "disabled");
                 logger.WriteLine("Ignore VCS errors: {0}",
                     ignoreVcsErrorsCheckBox.Checked ? "enabled" : "disabled");
+                logger.WriteLine("Collapsing path of output directory",
+                    RemovePathTextBox.Text);
 
                 var df = new VssDatabaseFactory(vssDirTextBox.Text);
                 df.Encoding = encoding;
                 var db = df.Open();
 
-                var path = vssProjectTextBox.Text;
-                VssItem item;
-                try
-                {
-                    item = db.GetItem(path);
-                }
-                catch (VssPathException ex)
-                {
-                    MessageBox.Show(ex.Message, "Invalid project path",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
 
-                var project = item as VssProject;
-                if (project == null)
-                {
-                    MessageBox.Show(path + " is not a project", "Invalid project path",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+                //start here
+
+
                 // read the emails dictionary
                 var emailDictionary = ReadDictionaryFile("e-mail dictionary", db.BasePath, emailPropertiesFileName);
 
@@ -194,7 +177,32 @@ namespace Hpdi.Vss2Git
                 {
                     revisionAnalyzer.ExcludeFiles = excludeTextBox.Text;
                 }
-                revisionAnalyzer.AddItem(project);
+
+                var paths = vssProjectTextBox.Text.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var path in paths)
+                {
+                    VssItem item;
+                    try
+                    {
+                        item = db.GetItem(path.Trim());
+                    }
+                    catch (VssPathException ex)
+                    {
+                        MessageBox.Show(ex.Message, "Invalid project path",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    var project = item as VssProject;
+                    if (project == null)
+                    {
+                        MessageBox.Show(path + " is not a project", "Invalid project path",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    revisionAnalyzer.AddItem(project);
+                }
+
 
                 changesetBuilder = new ChangesetBuilder(workQueue, logger, revisionAnalyzer);
                 changesetBuilder.AnyCommentThreshold = TimeSpan.FromSeconds((double)anyCommentUpDown.Value);
@@ -219,14 +227,14 @@ namespace Hpdi.Vss2Git
                     {
                         vcsExporter.CommitEncoding = encoding;
                     }
+                    vcsExporter.RemovePath = RemovePathTextBox.Text;
                     vcsExporter.TryGenerateCommitMessage = tryGenerateCommitMessageCheckBox.Checked;
                     vcsExporter.IgnoreVcsErrors = ignoreVcsErrorsCheckBox.Checked;
                     vcsExporter.ResetRepo = resetRepoCheckBox.Checked;
                     if (vcsExporter.ResetRepo)
                     {
                         vcsExporter.ExportToVcs(outDirTextBox.Text, null);
-                    }
-                    else
+                    } else
                     {
                         vcsExporter.ExportToVcs(outDirTextBox.Text, continueAfter);
                     }
@@ -254,7 +262,8 @@ namespace Hpdi.Vss2Git
 
         private IVcsWrapper CreateVcsWrapper(Encoding commitEncoding)
         {
-            Invoke((MethodInvoker)delegate { if (transcodeCheckBox.Checked) commitEncoding = Encoding.UTF8; } );
+            Invoke((MethodInvoker)delegate
+            { if (transcodeCheckBox.Checked) commitEncoding = Encoding.UTF8; });
             string repoPath = outDirTextBox.Text;
             string vcsType = vcsSetttingsTabs.SelectedTab.Text;
             if (vcsType.Equals(vcsTypeGit))
@@ -262,8 +271,7 @@ namespace Hpdi.Vss2Git
                 GitWrapper wrapper = new GitWrapper(repoPath, logger, commitEncoding, forceAnnotatedCheckBox.Checked);
                 wrapper.GitIgnoreInfo = $"{ignoreFile.Text}|{attributesFile.Text}|{userName.Text}|{userEmail.Text}|{initialComment.Text}";
                 return wrapper;
-            }
-            else if (vcsType.Equals(vcsTypeSvn))
+            } else if (vcsType.Equals(vcsTypeSvn))
             {
                 bool stdLayout = svnStandardLayoutCheckBox.Checked;
                 string trunk = stdLayout ? SvnWrapper.stdTrunk : svnTrunkTextBox.Text;
@@ -282,8 +290,7 @@ namespace Hpdi.Vss2Git
             if (goButton.Enabled)
             {
                 Close();
-            }
-            else
+            } else
             {
                 workQueue.Abort();
             }
@@ -584,8 +591,7 @@ namespace Hpdi.Vss2Git
                 {
                     logger.WriteLine("error reading " + fileKind + " from " + finalPath + ": " + x.Message);
                 }
-            }
-            else
+            } else
             {
                 // if the properties doesn't exist, return an empty dictionary
                 logger.WriteLine(fileKind + " not found: " + finalPath);
@@ -672,7 +678,7 @@ namespace Hpdi.Vss2Git
                 }
                 string propsPath = Path.Combine(db.BasePath, emailPropertiesFileName);
                 WriteDictionaryFile(emailDictionary, propsPath);
-                this.BeginInvoke((MethodInvoker)delegate 
+                this.BeginInvoke((MethodInvoker)delegate
                 {
                     MessageBox.Show(this, string.Format(emailUserNamesListMessage, propsPath),
                         emailUserNamesListCaption, MessageBoxButtons.OK, MessageBoxIcon.Information);

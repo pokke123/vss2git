@@ -72,6 +72,14 @@ The following links may be useful to anyone migrating from VSS and/or to Git. If
   * Alexander Gavrilov's [git-vss](http://github.com/angavrilov/git-vss/) ("incremental exchange of simple changes between Git and VSS")
 
 ## Release Notes ##
+**1.1.0.1 (28 Mar 2018)**
+
+new Features and improvements
+ * Added posibity to export multiple projects with a ;
+ * Added the posibity to remove volders in front of the path.
+
+Bug fixes:
+ -
 
 **1.1.0 (12 Dec 2015)**
 

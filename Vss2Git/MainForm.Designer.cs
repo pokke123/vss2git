@@ -34,8 +34,8 @@
             this.vssDirButton = new System.Windows.Forms.Button();
             this.encodingLabel = new System.Windows.Forms.Label();
             this.encodingComboBox = new System.Windows.Forms.ComboBox();
-            this.excludeTextBox = new System.Windows.Forms.TextBox();
-            this.excludeLabel = new System.Windows.Forms.Label();
+            this.RemovePathTextBox = new System.Windows.Forms.TextBox();
+            this.RemovePathLabel = new System.Windows.Forms.Label();
             this.vssProjectTextBox = new System.Windows.Forms.TextBox();
             this.vssDirTextBox = new System.Windows.Forms.TextBox();
             this.vssProjectLabel = new System.Windows.Forms.Label();
@@ -49,9 +49,9 @@
             this.changeLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.timeLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.outputGroupBox = new System.Windows.Forms.GroupBox();
-            this.ignoreVcsErrorsCheckBox = new System.Windows.Forms.CheckBox();
             this.tryGenerateCommitMessageCheckBox = new System.Windows.Forms.CheckBox();
             this.continueSyncCheckBox = new System.Windows.Forms.CheckBox();
+            this.ignoreVcsErrorsCheckBox = new System.Windows.Forms.CheckBox();
             this.outDirButton = new System.Windows.Forms.Button();
             this.resetRepoCheckBox = new System.Windows.Forms.CheckBox();
             this.vcsSetttingsTabs = new System.Windows.Forms.TabControl();
@@ -112,6 +112,8 @@
             this.saveSettingsButton = new System.Windows.Forms.Button();
             this.loadSettingsButton = new System.Windows.Forms.Button();
             this.emailMap = new System.Windows.Forms.Button();
+            this.excludeTextBox = new System.Windows.Forms.TextBox();
+            this.excludeLabel = new System.Windows.Forms.Label();
             this.vssGroupBox.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.outputGroupBox.SuspendLayout();
@@ -127,18 +129,20 @@
             // 
             this.vssGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.vssGroupBox.Controls.Add(this.excludeTextBox);
+            this.vssGroupBox.Controls.Add(this.excludeLabel);
             this.vssGroupBox.Controls.Add(this.vssDirButton);
             this.vssGroupBox.Controls.Add(this.encodingLabel);
             this.vssGroupBox.Controls.Add(this.encodingComboBox);
-            this.vssGroupBox.Controls.Add(this.excludeTextBox);
-            this.vssGroupBox.Controls.Add(this.excludeLabel);
+            this.vssGroupBox.Controls.Add(this.RemovePathTextBox);
+            this.vssGroupBox.Controls.Add(this.RemovePathLabel);
             this.vssGroupBox.Controls.Add(this.vssProjectTextBox);
             this.vssGroupBox.Controls.Add(this.vssDirTextBox);
             this.vssGroupBox.Controls.Add(this.vssProjectLabel);
             this.vssGroupBox.Controls.Add(this.vssDirLabel);
             this.vssGroupBox.Location = new System.Drawing.Point(12, 12);
             this.vssGroupBox.Name = "vssGroupBox";
-            this.vssGroupBox.Size = new System.Drawing.Size(620, 126);
+            this.vssGroupBox.Size = new System.Drawing.Size(635, 238);
             this.vssGroupBox.TabIndex = 0;
             this.vssGroupBox.TabStop = false;
             this.vssGroupBox.Text = "VSS Settings";
@@ -147,7 +151,7 @@
             // 
             this.vssDirButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.vssDirButton.Image = ((System.Drawing.Image)(resources.GetObject("vssDirButton.Image")));
-            this.vssDirButton.Location = new System.Drawing.Point(591, 17);
+            this.vssDirButton.Location = new System.Drawing.Point(606, 17);
             this.vssDirButton.Name = "vssDirButton";
             this.vssDirButton.Size = new System.Drawing.Size(23, 23);
             this.vssDirButton.TabIndex = 2;
@@ -157,7 +161,7 @@
             // encodingLabel
             // 
             this.encodingLabel.AutoSize = true;
-            this.encodingLabel.Location = new System.Drawing.Point(6, 100);
+            this.encodingLabel.Location = new System.Drawing.Point(6, 211);
             this.encodingLabel.Name = "encodingLabel";
             this.encodingLabel.Size = new System.Drawing.Size(52, 13);
             this.encodingLabel.TabIndex = 7;
@@ -169,36 +173,37 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.encodingComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.encodingComboBox.FormattingEnabled = true;
-            this.encodingComboBox.Location = new System.Drawing.Point(90, 97);
+            this.encodingComboBox.Location = new System.Drawing.Point(90, 208);
             this.encodingComboBox.Name = "encodingComboBox";
-            this.encodingComboBox.Size = new System.Drawing.Size(524, 21);
+            this.encodingComboBox.Size = new System.Drawing.Size(539, 21);
             this.encodingComboBox.TabIndex = 8;
             // 
-            // excludeTextBox
+            // RemovePathTextBox
             // 
-            this.excludeTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.RemovePathTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.excludeTextBox.Location = new System.Drawing.Point(90, 71);
-            this.excludeTextBox.Name = "excludeTextBox";
-            this.excludeTextBox.Size = new System.Drawing.Size(524, 20);
-            this.excludeTextBox.TabIndex = 6;
+            this.RemovePathTextBox.Location = new System.Drawing.Point(90, 157);
+            this.RemovePathTextBox.Name = "RemovePathTextBox";
+            this.RemovePathTextBox.Size = new System.Drawing.Size(539, 20);
+            this.RemovePathTextBox.TabIndex = 6;
             // 
-            // excludeLabel
+            // RemovePathLabel
             // 
-            this.excludeLabel.AutoSize = true;
-            this.excludeLabel.Location = new System.Drawing.Point(6, 74);
-            this.excludeLabel.Name = "excludeLabel";
-            this.excludeLabel.Size = new System.Drawing.Size(66, 13);
-            this.excludeLabel.TabIndex = 5;
-            this.excludeLabel.Text = "Exclude files";
+            this.RemovePathLabel.AutoSize = true;
+            this.RemovePathLabel.Location = new System.Drawing.Point(6, 160);
+            this.RemovePathLabel.Name = "RemovePathLabel";
+            this.RemovePathLabel.Size = new System.Drawing.Size(71, 13);
+            this.RemovePathLabel.TabIndex = 5;
+            this.RemovePathLabel.Text = "Remove path";
             // 
             // vssProjectTextBox
             // 
             this.vssProjectTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.vssProjectTextBox.Location = new System.Drawing.Point(90, 45);
+            this.vssProjectTextBox.Multiline = true;
             this.vssProjectTextBox.Name = "vssProjectTextBox";
-            this.vssProjectTextBox.Size = new System.Drawing.Size(524, 20);
+            this.vssProjectTextBox.Size = new System.Drawing.Size(539, 106);
             this.vssProjectTextBox.TabIndex = 4;
             this.vssProjectTextBox.TextChanged += new System.EventHandler(this.SourceProjectChanged);
             // 
@@ -208,7 +213,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.vssDirTextBox.Location = new System.Drawing.Point(90, 19);
             this.vssDirTextBox.Name = "vssDirTextBox";
-            this.vssDirTextBox.Size = new System.Drawing.Size(495, 20);
+            this.vssDirTextBox.Size = new System.Drawing.Size(510, 20);
             this.vssDirTextBox.TabIndex = 1;
             this.vssDirTextBox.TextChanged += new System.EventHandler(this.SourceProjectChanged);
             // 
@@ -233,7 +238,7 @@
             // goButton
             // 
             this.goButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.goButton.Location = new System.Drawing.Point(476, 591);
+            this.goButton.Location = new System.Drawing.Point(481, 709);
             this.goButton.Name = "goButton";
             this.goButton.Size = new System.Drawing.Size(75, 23);
             this.goButton.TabIndex = 3;
@@ -253,16 +258,16 @@
             this.revisionLabel,
             this.changeLabel,
             this.timeLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 622);
+            this.statusStrip.Location = new System.Drawing.Point(0, 739);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(644, 22);
+            this.statusStrip.Size = new System.Drawing.Size(659, 22);
             this.statusStrip.TabIndex = 5;
             this.statusStrip.Text = "statusStrip1";
             // 
             // statusLabel
             // 
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(344, 17);
+            this.statusLabel.Size = new System.Drawing.Size(359, 17);
             this.statusLabel.Spring = true;
             this.statusLabel.Text = "Idle";
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -311,23 +316,12 @@
             this.outputGroupBox.Controls.Add(this.logLabel);
             this.outputGroupBox.Controls.Add(this.commentLabel);
             this.outputGroupBox.Controls.Add(this.commentTextBox);
-            this.outputGroupBox.Location = new System.Drawing.Point(12, 138);
+            this.outputGroupBox.Location = new System.Drawing.Point(12, 256);
             this.outputGroupBox.Name = "outputGroupBox";
-            this.outputGroupBox.Size = new System.Drawing.Size(620, 366);
+            this.outputGroupBox.Size = new System.Drawing.Size(635, 366);
             this.outputGroupBox.TabIndex = 1;
             this.outputGroupBox.TabStop = false;
             this.outputGroupBox.Text = "Output Settings";
-            // 
-            // ignoreVcsErrorsCheckBox
-            // 
-            this.ignoreVcsErrorsCheckBox.AutoSize = true;
-            this.ignoreVcsErrorsCheckBox.Location = new System.Drawing.Point(306, 169);
-            this.ignoreVcsErrorsCheckBox.Name = "ignoreVcsErrorsCheckBox";
-            this.ignoreVcsErrorsCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.ignoreVcsErrorsCheckBox.Size = new System.Drawing.Size(109, 17);
-            this.ignoreVcsErrorsCheckBox.TabIndex = 13;
-            this.ignoreVcsErrorsCheckBox.Text = "Ignore VCS errors";
-            this.ignoreVcsErrorsCheckBox.UseVisualStyleBackColor = true;
             // 
             // tryGenerateCommitMessageCheckBox
             // 
@@ -352,11 +346,22 @@
             this.continueSyncCheckBox.UseVisualStyleBackColor = true;
             this.continueSyncCheckBox.CheckedChanged += new System.EventHandler(this.continueSyncCheckBox_CheckedChanged);
             // 
+            // ignoreVcsErrorsCheckBox
+            // 
+            this.ignoreVcsErrorsCheckBox.AutoSize = true;
+            this.ignoreVcsErrorsCheckBox.Location = new System.Drawing.Point(306, 169);
+            this.ignoreVcsErrorsCheckBox.Name = "ignoreVcsErrorsCheckBox";
+            this.ignoreVcsErrorsCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.ignoreVcsErrorsCheckBox.Size = new System.Drawing.Size(109, 17);
+            this.ignoreVcsErrorsCheckBox.TabIndex = 13;
+            this.ignoreVcsErrorsCheckBox.Text = "Ignore VCS errors";
+            this.ignoreVcsErrorsCheckBox.UseVisualStyleBackColor = true;
+            // 
             // outDirButton
             // 
             this.outDirButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.outDirButton.Image = ((System.Drawing.Image)(resources.GetObject("outDirButton.Image")));
-            this.outDirButton.Location = new System.Drawing.Point(591, 17);
+            this.outDirButton.Location = new System.Drawing.Point(606, 17);
             this.outDirButton.Name = "outDirButton";
             this.outDirButton.Size = new System.Drawing.Size(23, 23);
             this.outDirButton.TabIndex = 2;
@@ -385,7 +390,7 @@
             this.vcsSetttingsTabs.Location = new System.Drawing.Point(9, 200);
             this.vcsSetttingsTabs.Name = "vcsSetttingsTabs";
             this.vcsSetttingsTabs.SelectedIndex = 0;
-            this.vcsSetttingsTabs.Size = new System.Drawing.Size(605, 159);
+            this.vcsSetttingsTabs.Size = new System.Drawing.Size(620, 159);
             this.vcsSetttingsTabs.TabIndex = 15;
             this.vcsSetttingsTabs.SelectedIndexChanged += new System.EventHandler(this.vcsSetttingsTabs_SelectedIndexChanged);
             // 
@@ -407,7 +412,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(597, 133);
+            this.tabPage1.Size = new System.Drawing.Size(612, 133);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "git";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -416,7 +421,7 @@
             // 
             this.gitattributesFileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.gitattributesFileButton.Image = ((System.Drawing.Image)(resources.GetObject("gitattributesFileButton.Image")));
-            this.gitattributesFileButton.Location = new System.Drawing.Point(568, 50);
+            this.gitattributesFileButton.Location = new System.Drawing.Point(583, 50);
             this.gitattributesFileButton.Name = "gitattributesFileButton";
             this.gitattributesFileButton.Size = new System.Drawing.Size(23, 23);
             this.gitattributesFileButton.TabIndex = 6;
@@ -429,7 +434,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.attributesFile.Location = new System.Drawing.Point(78, 52);
             this.attributesFile.Name = "attributesFile";
-            this.attributesFile.Size = new System.Drawing.Size(484, 20);
+            this.attributesFile.Size = new System.Drawing.Size(499, 20);
             this.attributesFile.TabIndex = 5;
             // 
             // attributesFileLabel
@@ -447,7 +452,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.initialComment.Location = new System.Drawing.Point(78, 105);
             this.initialComment.Name = "initialComment";
-            this.initialComment.Size = new System.Drawing.Size(513, 20);
+            this.initialComment.Size = new System.Drawing.Size(528, 20);
             this.initialComment.TabIndex = 12;
             // 
             // initialCommentLabel
@@ -463,7 +468,7 @@
             // 
             this.gitignoreFileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.gitignoreFileButton.Image = ((System.Drawing.Image)(resources.GetObject("gitignoreFileButton.Image")));
-            this.gitignoreFileButton.Location = new System.Drawing.Point(568, 24);
+            this.gitignoreFileButton.Location = new System.Drawing.Point(583, 24);
             this.gitignoreFileButton.Name = "gitignoreFileButton";
             this.gitignoreFileButton.Size = new System.Drawing.Size(23, 23);
             this.gitignoreFileButton.TabIndex = 3;
@@ -492,7 +497,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ignoreFile.Location = new System.Drawing.Point(78, 26);
             this.ignoreFile.Name = "ignoreFile";
-            this.ignoreFile.Size = new System.Drawing.Size(484, 20);
+            this.ignoreFile.Size = new System.Drawing.Size(499, 20);
             this.ignoreFile.TabIndex = 2;
             // 
             // ignoreFileLabel
@@ -510,7 +515,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.userEmail.Location = new System.Drawing.Point(354, 79);
             this.userEmail.Name = "userEmail";
-            this.userEmail.Size = new System.Drawing.Size(237, 20);
+            this.userEmail.Size = new System.Drawing.Size(252, 20);
             this.userEmail.TabIndex = 10;
             // 
             // userEmailLabel
@@ -721,7 +726,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.domainTextBox.Location = new System.Drawing.Point(90, 45);
             this.domainTextBox.Name = "domainTextBox";
-            this.domainTextBox.Size = new System.Drawing.Size(524, 20);
+            this.domainTextBox.Size = new System.Drawing.Size(539, 20);
             this.domainTextBox.TabIndex = 4;
             // 
             // domainLabel
@@ -739,7 +744,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outDirTextBox.Location = new System.Drawing.Point(90, 19);
             this.outDirTextBox.Name = "outDirTextBox";
-            this.outDirTextBox.Size = new System.Drawing.Size(495, 20);
+            this.outDirTextBox.Size = new System.Drawing.Size(510, 20);
             this.outDirTextBox.TabIndex = 1;
             this.outDirTextBox.TextChanged += new System.EventHandler(this.outDirTextBox_TextChanged);
             // 
@@ -758,7 +763,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.logTextBox.Location = new System.Drawing.Point(90, 72);
             this.logTextBox.Name = "logTextBox";
-            this.logTextBox.Size = new System.Drawing.Size(524, 20);
+            this.logTextBox.Size = new System.Drawing.Size(539, 20);
             this.logTextBox.TabIndex = 6;
             // 
             // logLabel
@@ -785,14 +790,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.commentTextBox.Location = new System.Drawing.Point(90, 97);
             this.commentTextBox.Name = "commentTextBox";
-            this.commentTextBox.Size = new System.Drawing.Size(524, 20);
+            this.commentTextBox.Size = new System.Drawing.Size(539, 20);
             this.commentTextBox.TabIndex = 8;
             // 
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(557, 591);
+            this.cancelButton.Location = new System.Drawing.Point(562, 709);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 4;
@@ -809,9 +814,9 @@
             this.changesetGroupBox.Controls.Add(this.label2);
             this.changesetGroupBox.Controls.Add(this.label1);
             this.changesetGroupBox.Controls.Add(this.anyCommentUpDown);
-            this.changesetGroupBox.Location = new System.Drawing.Point(12, 510);
+            this.changesetGroupBox.Location = new System.Drawing.Point(12, 628);
             this.changesetGroupBox.Name = "changesetGroupBox";
-            this.changesetGroupBox.Size = new System.Drawing.Size(406, 75);
+            this.changesetGroupBox.Size = new System.Drawing.Size(635, 75);
             this.changesetGroupBox.TabIndex = 2;
             this.changesetGroupBox.TabStop = false;
             this.changesetGroupBox.Text = "Changeset Building";
@@ -901,7 +906,7 @@
             // saveSettingsButton
             // 
             this.saveSettingsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.saveSettingsButton.Location = new System.Drawing.Point(12, 591);
+            this.saveSettingsButton.Location = new System.Drawing.Point(12, 709);
             this.saveSettingsButton.Name = "saveSettingsButton";
             this.saveSettingsButton.Size = new System.Drawing.Size(75, 23);
             this.saveSettingsButton.TabIndex = 6;
@@ -912,7 +917,7 @@
             // loadSettingsButton
             // 
             this.loadSettingsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.loadSettingsButton.Location = new System.Drawing.Point(93, 591);
+            this.loadSettingsButton.Location = new System.Drawing.Point(93, 709);
             this.loadSettingsButton.Name = "loadSettingsButton";
             this.loadSettingsButton.Size = new System.Drawing.Size(75, 23);
             this.loadSettingsButton.TabIndex = 7;
@@ -923,7 +928,7 @@
             // emailMap
             // 
             this.emailMap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.emailMap.Location = new System.Drawing.Point(191, 591);
+            this.emailMap.Location = new System.Drawing.Point(191, 709);
             this.emailMap.Name = "emailMap";
             this.emailMap.Size = new System.Drawing.Size(136, 23);
             this.emailMap.TabIndex = 8;
@@ -931,13 +936,31 @@
             this.emailMap.UseVisualStyleBackColor = true;
             this.emailMap.Click += new System.EventHandler(this.emailMap_Click);
             // 
+            // excludeTextBox
+            // 
+            this.excludeTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.excludeTextBox.Location = new System.Drawing.Point(90, 182);
+            this.excludeTextBox.Name = "excludeTextBox";
+            this.excludeTextBox.Size = new System.Drawing.Size(539, 20);
+            this.excludeTextBox.TabIndex = 10;
+            // 
+            // excludeLabel
+            // 
+            this.excludeLabel.AutoSize = true;
+            this.excludeLabel.Location = new System.Drawing.Point(6, 185);
+            this.excludeLabel.Name = "excludeLabel";
+            this.excludeLabel.Size = new System.Drawing.Size(66, 13);
+            this.excludeLabel.TabIndex = 9;
+            this.excludeLabel.Text = "Exclude files";
+            // 
             // MainForm
             // 
             this.AcceptButton = this.goButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(644, 644);
+            this.ClientSize = new System.Drawing.Size(659, 761);
             this.Controls.Add(this.emailMap);
             this.Controls.Add(this.loadSettingsButton);
             this.Controls.Add(this.saveSettingsButton);
@@ -948,8 +971,8 @@
             this.Controls.Add(this.vssGroupBox);
             this.Controls.Add(this.statusStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(1600, 682);
-            this.MinimumSize = new System.Drawing.Size(600, 682);
+            this.MaximumSize = new System.Drawing.Size(1600, 800);
+            this.MinimumSize = new System.Drawing.Size(600, 800);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "VSS2Git";
@@ -997,8 +1020,8 @@
         private System.Windows.Forms.Label outDirLabel;
         private System.Windows.Forms.TextBox domainTextBox;
         private System.Windows.Forms.Label domainLabel;
-        private System.Windows.Forms.TextBox excludeTextBox;
-        private System.Windows.Forms.Label excludeLabel;
+        private System.Windows.Forms.TextBox RemovePathTextBox;
+        private System.Windows.Forms.Label RemovePathLabel;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.GroupBox changesetGroupBox;
         private System.Windows.Forms.NumericUpDown anyCommentUpDown;
@@ -1059,6 +1082,8 @@
         private System.Windows.Forms.CheckBox tryGenerateCommitMessageCheckBox;
         private System.Windows.Forms.TextBox commentTextBox;
         private System.Windows.Forms.Label commentLabel;
+        private System.Windows.Forms.TextBox excludeTextBox;
+        private System.Windows.Forms.Label excludeLabel;
     }
 }
 

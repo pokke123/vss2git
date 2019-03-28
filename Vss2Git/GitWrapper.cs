@@ -92,7 +92,7 @@ namespace Hpdi.Vss2Git
                 {
                     bool addFirstCommit = false;
                     if (!string.IsNullOrWhiteSpace(data[0]))
-                    { 
+                    {
                         string myIgnoreFile = Path.Combine(data[0], gitIgnoreFile);
                         if (!File.Exists(myIgnoreFile))
                         {
@@ -106,7 +106,7 @@ namespace Hpdi.Vss2Git
                         }
                     }
                     if (!string.IsNullOrWhiteSpace(data[1]))
-                    { 
+                    {
                         string myAttrFile = Path.Combine(data[1], gitAttributesFile);
                         if (!File.Exists(myAttrFile))
                         {
@@ -149,7 +149,8 @@ namespace Hpdi.Vss2Git
 
             // add fails if there are no files (directories don't count)
             bool result = ExecuteUnless(startInfo, "did not match any files");
-            if (result) SetNeedsCommit();
+            if (result)
+                SetNeedsCommit();
             return result;
         }
 
@@ -190,7 +191,8 @@ namespace Hpdi.Vss2Git
 
             // add fails if there are no files (directories don't count)
             bool result = ExecuteUnless(startInfo, "did not match any files");
-            if (result) SetNeedsCommit();
+            if (result)
+                SetNeedsCommit();
             return result;
         }
 
@@ -246,7 +248,7 @@ namespace Hpdi.Vss2Git
 
         public override void Move(string sourcePath, string destPath)
         {
-            if (!VcsExecUnless("mv -f -- " + QuoteRelativePath(sourcePath) + " " + QuoteRelativePath(destPath), "source directory is empty"))
+            if (sourcePath != destPath && !VcsExecUnless("mv -f -- " + QuoteRelativePath(sourcePath) + " " + QuoteRelativePath(destPath), "source directory is empty"))
             {
                 Directory.Move(sourcePath, destPath);
             }
@@ -332,13 +334,11 @@ namespace Hpdi.Vss2Git
 
                     // temporary path might contain spaces (e.g. "Documents and Settings")
                     args += " -F " + Quote(tempFile.Name);
-                }
-                else
+                } else
                 {
                     args += " -m " + Quote(comment);
                 }
-            }
-            else
+            } else
             {
                 args += " --allow-empty-message --no-edit -m \"\"";
             }
@@ -359,7 +359,8 @@ namespace Hpdi.Vss2Git
         {
             if (Directory.Exists(Path.Combine(GetOutputDirectory(), gitMetaDir)) && FindExecutable())
             {
-                try {
+                try
+                {
                     var startInfo = GetStartInfo("log -n 1 --date=raw");
                     string stdout, stderr;
                     int exitCode = Execute(startInfo, out stdout, out stderr);
@@ -374,7 +375,8 @@ namespace Hpdi.Vss2Git
                             return dt;
                         }
                     }
-                } catch (Exception )
+                }
+                catch (Exception)
                 {
                 }
             }
