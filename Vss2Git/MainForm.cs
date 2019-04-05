@@ -231,6 +231,7 @@ namespace Hpdi.Vss2Git
                     vcsExporter.TryGenerateCommitMessage = tryGenerateCommitMessageCheckBox.Checked;
                     vcsExporter.IgnoreVcsErrors = ignoreVcsErrorsCheckBox.Checked;
                     vcsExporter.ResetRepo = resetRepoCheckBox.Checked;
+                    vcsExporter.FolderBeforeLabel = FolderBeforeLabel.Checked;
                     if (vcsExporter.ResetRepo)
                     {
                         vcsExporter.ExportToVcs(outDirTextBox.Text, null);
@@ -524,6 +525,8 @@ namespace Hpdi.Vss2Git
             userName.Text = settings.GitFirstCommitUserName;
             userEmail.Text = settings.GitFirstCommitUserMail;
             initialComment.Text = settings.GitFirstCommitComment;
+            RemovePathTextBox.Text = settings.RemovePath;
+            FolderBeforeLabel.Checked = settings.FolderBeforeLabel;
 
             int index = 0;
             int count = vcsSetttingsTabs.TabPages.Count;
@@ -569,6 +572,8 @@ namespace Hpdi.Vss2Git
             settings.GitFirstCommitUserName = userName.Text;
             settings.GitFirstCommitUserMail = userEmail.Text;
             settings.GitFirstCommitComment = initialComment.Text;
+            settings.RemovePath = RemovePathTextBox.Text;
+            settings.FolderBeforeLabel = FolderBeforeLabel.Checked;
         }
 
         private IDictionary<string, string> ReadDictionaryFile(string fileKind, string repoPath, string fileName)

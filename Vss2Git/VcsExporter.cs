@@ -92,6 +92,12 @@ namespace Hpdi.Vss2Git
             get { return removePath; }
             set { removePath = value; }
         }
+        private bool folderBeforeLabel = false;
+        public bool FolderBeforeLabel
+        {
+            get { return folderBeforeLabel; }
+            set { folderBeforeLabel = value; }
+        }
 
         public VcsExporter(WorkQueue workQueue, Logger logger,
             RevisionAnalyzer revisionAnalyzer, ChangesetBuilder changesetBuilder,
@@ -326,15 +332,15 @@ namespace Hpdi.Vss2Git
                                 logger.WriteLine("NOTE: Ignoring label '{0}' before initial commit", labelName);
                             } else
                             {
-                                //Datell Specific operation of adding folder structure to label.
-                                if (label.Item.IsProject)
+
+                                //Datell B.V. Specific operation of adding folder structure to label.
+                                //It is optional by using the checkbox
+                                if (FolderBeforeLabel && label.Item.IsProject)
                                 {
                                     labelName = pathMapper.GetProjectPath(label.Item.PhysicalName) + "_" + labelName;
                                     labelName = labelName.Replace(repoPath, "").TrimStart('\\');
-                                } else
-                                {
-                                    labelName = label.Item.LogicalName + "_" + labelName;
                                 }
+
                                 var tagName = GetTagFromLabel(labelName);
 
                                 var tagMessage = "Creating tag " + tagName;
