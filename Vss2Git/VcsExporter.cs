@@ -175,7 +175,6 @@ namespace Hpdi.Vss2Git
                 {
                     // root must be repo path here - the path mapper uses paths relative to this one
                     VssPathMapper vssPathMapper = new VssPathMapper();
-                    string test = vssPathMapper.GetWorkingPath(repoPath, rootProject.Path);
                     var rootPath = repoPath;
                     if (RemovePath != "")
                     {
@@ -327,6 +326,15 @@ namespace Hpdi.Vss2Git
                                 logger.WriteLine("NOTE: Ignoring label '{0}' before initial commit", labelName);
                             } else
                             {
+                                //Datell Specific operation of adding folder structure to label.
+                                if (label.Item.IsProject)
+                                {
+                                    labelName = pathMapper.GetProjectPath(label.Item.PhysicalName) + "_" + labelName;
+                                    labelName = labelName.Replace(repoPath, "").TrimStart('\\');
+                                } else
+                                {
+                                    labelName = label.Item.LogicalName + "_" + labelName;
+                                }
                                 var tagName = GetTagFromLabel(labelName);
 
                                 var tagMessage = "Creating tag " + tagName;
