@@ -78,9 +78,6 @@ new Features and improvements
  * Added posibity to export multiple projects with a ;
  * Added the posibity to remove volders in front of the path.
 
-Bug fixes:
- -
-
 **1.1.0 (12 Dec 2015)**
 
 New features and improvements:
