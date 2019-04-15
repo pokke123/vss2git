@@ -29,10 +29,17 @@ namespace Hpdi.VssLogicalLib
     public class VssProject : VssItem
     {
         private readonly string logicalPath;
+        private string rootPath;
 
         public string Path
         {
             get { return logicalPath; }
+        }
+
+        public string RootPath
+        {
+            get { return rootPath; }
+            set { rootPath = value; }
         }
 
         public IEnumerable<VssProject> Projects

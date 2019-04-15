@@ -23,12 +23,6 @@
     <Setting Name="TranscodeComments" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="AnyCommentSeconds" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">30</Value>
-    </Setting>
-    <Setting Name="SameCommentSeconds" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">600</Value>
-    </Setting>
     <Setting Name="ForceAnnotatedTags" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
@@ -71,21 +65,6 @@
     <Setting Name="ContinueSync" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="GitFirstCommitIgnoreFile" Type="System.String" Scope="User">
-      <Value Profile="(Default)">trunk</Value>
-    </Setting>
-    <Setting Name="GitFirstCommitAttributesFile" Type="System.String" Scope="User">
-      <Value Profile="(Default)">trunk</Value>
-    </Setting>
-    <Setting Name="GitFirstCommitUserName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">trunk</Value>
-    </Setting>
-    <Setting Name="GitFirstCommitUserMail" Type="System.String" Scope="User">
-      <Value Profile="(Default)">trunk</Value>
-    </Setting>
-    <Setting Name="GitFirstCommitComment" Type="System.String" Scope="User">
-      <Value Profile="(Default)">trunk</Value>
-    </Setting>
     <Setting Name="DefaultComment" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -93,6 +72,33 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="FolderBeforeLabel" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="AnyCommentSeconds" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">20</Value>
+    </Setting>
+    <Setting Name="SameCommentSeconds" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">120</Value>
+    </Setting>
+    <Setting Name="GitFirstCommitIgnoreFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="GitFirstCommitAttributesFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="GitFirstCommitUserName" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="GitFirstCommitUserMail" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="GitFirstCommitComment" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ProjectsFileLocation" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="UseProjectsFile" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>

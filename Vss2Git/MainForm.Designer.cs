@@ -115,6 +115,10 @@
             this.saveSettingsButton = new System.Windows.Forms.Button();
             this.loadSettingsButton = new System.Windows.Forms.Button();
             this.emailMap = new System.Windows.Forms.Button();
+            this.ProjectsFileLocation = new System.Windows.Forms.TextBox();
+            this.LoadProjectsFile = new System.Windows.Forms.Button();
+            this.ProjectsFile = new System.Windows.Forms.Label();
+            this.UseProjectsFile = new System.Windows.Forms.CheckBox();
             this.vssGroupBox.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.outputGroupBox.SuspendLayout();
@@ -130,6 +134,9 @@
             // 
             this.vssGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.vssGroupBox.Controls.Add(this.ProjectsFile);
+            this.vssGroupBox.Controls.Add(this.LoadProjectsFile);
+            this.vssGroupBox.Controls.Add(this.ProjectsFileLocation);
             this.vssGroupBox.Controls.Add(this.excludeTextBox);
             this.vssGroupBox.Controls.Add(this.excludeLabel);
             this.vssGroupBox.Controls.Add(this.vssDirButton);
@@ -219,10 +226,10 @@
             // 
             this.vssProjectTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.vssProjectTextBox.Location = new System.Drawing.Point(90, 45);
+            this.vssProjectTextBox.Location = new System.Drawing.Point(90, 71);
             this.vssProjectTextBox.Multiline = true;
             this.vssProjectTextBox.Name = "vssProjectTextBox";
-            this.vssProjectTextBox.Size = new System.Drawing.Size(539, 106);
+            this.vssProjectTextBox.Size = new System.Drawing.Size(539, 80);
             this.vssProjectTextBox.TabIndex = 4;
             this.vssProjectTextBox.TextChanged += new System.EventHandler(this.SourceProjectChanged);
             // 
@@ -239,7 +246,7 @@
             // vssProjectLabel
             // 
             this.vssProjectLabel.AutoSize = true;
-            this.vssProjectLabel.Location = new System.Drawing.Point(6, 48);
+            this.vssProjectLabel.Location = new System.Drawing.Point(6, 71);
             this.vssProjectLabel.Name = "vssProjectLabel";
             this.vssProjectLabel.Size = new System.Drawing.Size(40, 13);
             this.vssProjectLabel.TabIndex = 3;
@@ -319,6 +326,7 @@
             // 
             this.outputGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.outputGroupBox.Controls.Add(this.UseProjectsFile);
             this.outputGroupBox.Controls.Add(this.FolderBeforeLabel);
             this.outputGroupBox.Controls.Add(this.tryGenerateCommitMessageCheckBox);
             this.outputGroupBox.Controls.Add(this.continueSyncCheckBox);
@@ -966,6 +974,46 @@
             this.emailMap.UseVisualStyleBackColor = true;
             this.emailMap.Click += new System.EventHandler(this.emailMap_Click);
             // 
+            // ProjectsFileLocation
+            // 
+            this.ProjectsFileLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ProjectsFileLocation.Location = new System.Drawing.Point(90, 45);
+            this.ProjectsFileLocation.Name = "ProjectsFileLocation";
+            this.ProjectsFileLocation.Size = new System.Drawing.Size(510, 20);
+            this.ProjectsFileLocation.TabIndex = 11;
+            // 
+            // LoadProjectsFile
+            // 
+            this.LoadProjectsFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.LoadProjectsFile.Image = ((System.Drawing.Image)(resources.GetObject("LoadProjectsFile.Image")));
+            this.LoadProjectsFile.Location = new System.Drawing.Point(606, 42);
+            this.LoadProjectsFile.Name = "LoadProjectsFile";
+            this.LoadProjectsFile.Size = new System.Drawing.Size(23, 23);
+            this.LoadProjectsFile.TabIndex = 12;
+            this.LoadProjectsFile.UseVisualStyleBackColor = true;
+            this.LoadProjectsFile.Click += new System.EventHandler(this.ProjectsFileButton);
+            // 
+            // ProjectsFile
+            // 
+            this.ProjectsFile.AutoSize = true;
+            this.ProjectsFile.Location = new System.Drawing.Point(6, 47);
+            this.ProjectsFile.Name = "ProjectsFile";
+            this.ProjectsFile.Size = new System.Drawing.Size(61, 13);
+            this.ProjectsFile.TabIndex = 13;
+            this.ProjectsFile.Text = "Projects file";
+            // 
+            // UseProjectsFile
+            // 
+            this.UseProjectsFile.AutoSize = true;
+            this.UseProjectsFile.Location = new System.Drawing.Point(306, 191);
+            this.UseProjectsFile.Name = "UseProjectsFile";
+            this.UseProjectsFile.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.UseProjectsFile.Size = new System.Drawing.Size(136, 17);
+            this.UseProjectsFile.TabIndex = 17;
+            this.UseProjectsFile.Text = "Use file to load projects";
+            this.UseProjectsFile.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AcceptButton = this.goButton;
@@ -1097,6 +1145,10 @@
         private System.Windows.Forms.TextBox excludeTextBox;
         private System.Windows.Forms.Label excludeLabel;
         private System.Windows.Forms.CheckBox FolderBeforeLabel;
+        private System.Windows.Forms.Label ProjectsFile;
+        private System.Windows.Forms.Button LoadProjectsFile;
+        private System.Windows.Forms.TextBox ProjectsFileLocation;
+        private System.Windows.Forms.CheckBox UseProjectsFile;
     }
 }
 

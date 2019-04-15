@@ -167,7 +167,7 @@ namespace Hpdi.Vss2Git
 
 
                 //start here
-
+                string[] lines;
 
                 // read the emails dictionary
                 var emailDictionary = ReadDictionaryFile("e-mail dictionary", db.BasePath, emailPropertiesFileName);
@@ -178,29 +178,60 @@ namespace Hpdi.Vss2Git
                     revisionAnalyzer.ExcludeFiles = excludeTextBox.Text;
                 }
 
-                var paths = vssProjectTextBox.Text.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (var path in paths)
+                if (UseProjectsFile.Checked)
                 {
-                    VssItem item;
-                    try
+                    lines = File.ReadAllLines(ProjectsFileLocation.Text, Encoding.UTF8);
+                    foreach(String line in lines)
                     {
-                        item = db.GetItem(path.Trim());
-                    }
-                    catch (VssPathException ex)
-                    {
-                        MessageBox.Show(ex.Message, "Invalid project path",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
+                        if(line.Length <= 0) { continue; }
+                        string[] variation = line.Split('=');
+                        string vssPath = variation[0];
+                        //Here add the paths.
+                        VssProject item;
+                        try
+                        {
+                            item = (VssProject)db.GetItem(vssPath.Trim());
+                        }
+                        catch (VssPathException ex)
+                        {
+                            MessageBox.Show(ex.Message, "Invalid project path",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        if(variation.Length > 1)
+                        {
+                            item.RootPath = variation[1].Trim();
+                        }
 
-                    var project = item as VssProject;
-                    if (project == null)
-                    {
-                        MessageBox.Show(path + " is not a project", "Invalid project path",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
+                        revisionAnalyzer.AddItem(item);
                     }
-                    revisionAnalyzer.AddItem(project);
+                }
+                else
+                {
+                    var paths = vssProjectTextBox.Text.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var path in paths)
+                    {
+                        VssItem item;
+                        try
+                        {
+                            item = db.GetItem(path.Trim());
+                        }
+                        catch (VssPathException ex)
+                        {
+                            MessageBox.Show(ex.Message, "Invalid project path",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+                        var project = item as VssProject;
+                        if (project == null)
+                        {
+                            MessageBox.Show(path + " is not a project", "Invalid project path",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        revisionAnalyzer.AddItem(project);
+                    }
                 }
 
 
@@ -232,6 +263,9 @@ namespace Hpdi.Vss2Git
                     vcsExporter.IgnoreVcsErrors = ignoreVcsErrorsCheckBox.Checked;
                     vcsExporter.ResetRepo = resetRepoCheckBox.Checked;
                     vcsExporter.FolderBeforeLabel = FolderBeforeLabel.Checked;
+
+                    vcsExporter.UseProjectsFile = UseProjectsFile.Checked;
+
                     if (vcsExporter.ResetRepo)
                     {
                         vcsExporter.ExportToVcs(outDirTextBox.Text, null);
@@ -521,13 +555,14 @@ namespace Hpdi.Vss2Git
             svnTagsTextBox.Text = settings.SvnTags;
             svnBranchesTextBox.Text = settings.SvnBranches;
             ignoreFile.Text = settings.GitFirstCommitIgnoreFile;
+            ProjectsFileLocation.Text = settings.ProjectsFileLocation;
             attributesFile.Text = settings.GitFirstCommitAttributesFile;
             userName.Text = settings.GitFirstCommitUserName;
             userEmail.Text = settings.GitFirstCommitUserMail;
             initialComment.Text = settings.GitFirstCommitComment;
             RemovePathTextBox.Text = settings.RemovePath;
             FolderBeforeLabel.Checked = settings.FolderBeforeLabel;
-
+            UseProjectsFile.Checked = settings.UseProjectsFile;
             int index = 0;
             int count = vcsSetttingsTabs.TabPages.Count;
             for (int i = 0; i < count; i++)
@@ -574,6 +609,8 @@ namespace Hpdi.Vss2Git
             settings.GitFirstCommitComment = initialComment.Text;
             settings.RemovePath = RemovePathTextBox.Text;
             settings.FolderBeforeLabel = FolderBeforeLabel.Checked;
+            settings.ProjectsFileLocation = ProjectsFileLocation.Text;
+            settings.UseProjectsFile = UseProjectsFile.Checked;
         }
 
         private IDictionary<string, string> ReadDictionaryFile(string fileKind, string repoPath, string fileName)
@@ -819,6 +856,30 @@ namespace Hpdi.Vss2Git
         private void SourceProjectChanged(object sender, EventArgs e)
         {
             this.ignoreVcsErrorsCheckBox.Checked = false;
+        }
+
+        private void ProjectsFileButton(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dlg = new OpenFileDialog())
+            {
+                try
+                {
+                    dlg.FileName = this.ProjectsFileLocation.Text;
+                    dlg.CheckPathExists = true;
+                    dlg.CheckFileExists = true;
+                    dlg.Multiselect = false;
+                    dlg.Filter = "Projectslist file|*.txt";
+                    dlg.Title = "Select projects list .txt file";
+                    if (dlg.ShowDialog() == DialogResult.OK)
+                    {
+                        this.ProjectsFileLocation.Text = dlg.FileName;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "VSS2Git", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

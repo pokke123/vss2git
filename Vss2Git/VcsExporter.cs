@@ -99,6 +99,13 @@ namespace Hpdi.Vss2Git
             set { folderBeforeLabel = value; }
         }
 
+        private bool useProjectsFile = false;
+        public bool UseProjectsFile
+        {
+            get { return useProjectsFile; }
+            set { useProjectsFile = value; }
+        }
+
         public VcsExporter(WorkQueue workQueue, Logger logger,
             RevisionAnalyzer revisionAnalyzer, ChangesetBuilder changesetBuilder,
             IVcsWrapper vcsWrapper, IDictionary<string, string> usersmap)
@@ -176,42 +183,65 @@ namespace Hpdi.Vss2Git
 
                 var pathMapper = new VssPathMapper();
 
-                // create mappings for root projects
-                foreach (var rootProject in revisionAnalyzer.RootProjects)
+                if (UseProjectsFile)
                 {
-                    // root must be repo path here - the path mapper uses paths relative to this one
-                    VssPathMapper vssPathMapper = new VssPathMapper();
-                    var rootPath = repoPath;
-                    if (RemovePath != "")
+                    string rootPath = repoPath;
+                    foreach (var rootProject in revisionAnalyzer.RootProjects)
                     {
-                        if (rootProject.Path.StartsWith(RemovePath))
+                        string path = rootProject.RootPath;
+                        path = path.Replace("/", "\\");
+                        if (path.StartsWith("\\"))
                         {
-                            string path = rootProject.Path.Replace(RemovePath, "");
-                            path = path.Replace("/", "\\");
-                            if (path.StartsWith("\\"))
-                            {
 
-                                rootPath = rootPath + path;
-                            } else
-                            {
-                                rootPath = rootPath + "\\" + path;
-                            }
-                        } else
+                            path = rootPath + path;
+                        }
+                        else
                         {
-                            var button = MessageBox.Show($"{RemovePath} not found in path, Do you wanne continue with all contint in the root folder.",
-                            "Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-                            if (button == DialogResult.Cancel)
+                            path = rootPath + "\\" + path;
+                        }
+                        pathMapper.SetProjectPath(rootProject.PhysicalName, path, rootProject.Path);
+                    }
+                }
+                else
+                {
+                    // create mappings for root projects
+                    foreach (var rootProject in revisionAnalyzer.RootProjects)
+                    {
+                        // root must be repo path here - the path mapper uses paths relative to this one
+                        VssPathMapper vssPathMapper = new VssPathMapper();
+                        var rootPath = repoPath;
+                        if (RemovePath != "")
+                        {
+                            if (rootProject.Path.StartsWith(RemovePath))
                             {
-                                workQueue.Abort();
-                                return;
+                                string path = rootProject.Path.Replace(RemovePath, "");
+                                path = path.Replace("/", "\\");
+                                if (path.StartsWith("\\"))
+                                {
+
+                                    rootPath = rootPath + path;
+                                }
+                                else
+                                {
+                                    rootPath = rootPath + "\\" + path;
+                                }
+                            }
+                            else
+                            {
+                                var button = MessageBox.Show($"{RemovePath} not found in path, Do you wanne continue with all contint in the root folder.",
+                                "Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                                if (button == DialogResult.Cancel)
+                                {
+                                    workQueue.Abort();
+                                    return;
+                                }
                             }
                         }
+
+
+                        pathMapper.SetProjectPath(rootProject.PhysicalName, rootPath, rootProject.Path);
                     }
-
-
-                    pathMapper.SetProjectPath(rootProject.PhysicalName, rootPath, rootProject.Path);
                 }
-
                 var changesets = changesetBuilder.Changesets;
 
                 // create a log of all MoveFrom and MoveTo actions
