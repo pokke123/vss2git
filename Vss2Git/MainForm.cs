@@ -202,6 +202,10 @@ namespace Hpdi.Vss2Git
                         {
                             item.RootPath = variation[1].Trim();
                         }
+                        else
+                        {
+                            item.RootPath = "";
+                        }
 
                         revisionAnalyzer.AddItem(item);
                     }
